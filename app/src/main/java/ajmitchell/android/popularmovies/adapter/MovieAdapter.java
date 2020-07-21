@@ -15,6 +15,7 @@ import java.util.List;
 
 import ajmitchell.android.popularmovies.R;
 import ajmitchell.android.popularmovies.model.Movie;
+import ajmitchell.android.popularmovies.utils.Constants;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
@@ -45,7 +46,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         // but we want to post those as pics, so we'll be posting the images to our recyclerView
 
         Movie movie = mMoviesList.get(position);
-        String imageUrl = movie.getPosterPath();
+        String imageUrl = Constants.BASE_IMAGE_URL + Constants.BASE_IMAGE_SIZE + movie.getPosterPath();
         Picasso.get()
                 .load(imageUrl)
                 .into(holder.image);
@@ -54,6 +55,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
+        if (mMoviesList == null) {
+            return 0;
+        }
         return mMoviesList.size();
     }
 

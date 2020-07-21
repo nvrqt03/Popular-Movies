@@ -1,6 +1,7 @@
 package ajmitchell.android.popularmovies;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
 //                android.R.layout.simple_list_item_1,
 //                movies);
         recyclerView = findViewById(R.id.recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        adapter = new MovieAdapter();
+        recyclerView.setAdapter(adapter);
 
 //        recyclerView.setAdapter(adapter);
         // here we will set the onclick to the recyclerView instead of the button.
@@ -71,10 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
                 if (response.isSuccessful()) {
-                    Movie movie = (Movie) response.body();
-                    //imageUrl = Constants.BASE_IMAGE_URL + Constants.BASE_IMAGE_SIZE +
-                    String moviePath =  movie.getPosterPath();
-                    Log.d(TAG, "onResponse: " + moviePath);
+                    adapter.setMovie(response.body());
                 } else {
                     Log.d(TAG, "onResponse: something's wrong");
                 }
