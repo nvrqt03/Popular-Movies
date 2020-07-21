@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import ajmitchell.android.popularmovies.R;
@@ -16,9 +18,14 @@ import ajmitchell.android.popularmovies.model.Movie;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
+    private Context context;
     private List<Movie> mMoviesList;
 
-    public MovieAdapter(List<Movie> movies) {
+    public MovieAdapter( ) {
+
+    }
+
+    public void setMovie(List<Movie> movies) {
         mMoviesList = movies;
     }
 
@@ -34,15 +41,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Movie movie = mMoviesList.get(position);
+        // we want to get a list of the movies from the api - popular movies and highly rated. but we should get a list of those movies.
+        // but we want to post those as pics, so we'll be posting the images to our recyclerView
 
-        ImageView imageView = holder.image;
-        ;
+        Movie movie = mMoviesList.get(position);
+        String imageUrl = movie.getPosterPath();
+        Picasso.get()
+                .load(imageUrl)
+                .into(holder.image);
+
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mMoviesList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +64,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 //        public TextView overView;
 //        public TextView voteAvg;
 //        public TextView releaseDate;
-
 
 
         public ViewHolder(@NonNull View itemView) {

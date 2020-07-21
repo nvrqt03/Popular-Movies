@@ -1,61 +1,64 @@
 package ajmitchell.android.popularmovies.model;
 
+import java.util.List;
+
 public class Movie {
 
-    private String mTitle;
-    private String mPosterPath;
-    private String mOverview;
-    private int mVoteAverage;
-    private String mReleaseDate;
+    private String title;
+    private String posterPath;
+    private String overview;
+    private int voteAverage;
+    private String releaseDate;
 
     public Movie() {
     }
 
-    public Movie(String mTitle, String mPosterPath, String mOverview, int mVoteAverage, String mReleaseDate) {
-        this.mTitle = mTitle;
-        this.mPosterPath = mPosterPath;
-        this.mOverview = mOverview;
-        this.mVoteAverage = mVoteAverage;
-        this.mReleaseDate = mReleaseDate;
+    public Movie(String title, String posterPath, String overview, int voteAverage, String releaseDate) {
+        this.title = title;
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.voteAverage = voteAverage;
+        this.releaseDate = releaseDate;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
-    public void setTitle(String mTitle) {
-        this.mTitle = mTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPosterPath() {
-        return mPosterPath;
+
+        return posterPath;
     }
 
-    public void setPosterPath(String mPosterPath) {
-        this.mPosterPath = mPosterPath;
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
     public String getOverview() {
-        return mOverview;
+        return overview;
     }
 
-    public void setOverview(String mOverview) {
-        this.mOverview = mOverview;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
     public int getVoteAverage() {
-        return mVoteAverage;
+        return voteAverage;
     }
 
-    public void setVoteAverage(int mVoteAverage) {
-        this.mVoteAverage = mVoteAverage;
+    public void setVoteAverage(int voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
     public String getReleaseDate() {
-        return mReleaseDate;
+        return releaseDate;
     }
 
-    public void setReleaseDate(String mReleaseDate) {
-        this.mReleaseDate = mReleaseDate;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

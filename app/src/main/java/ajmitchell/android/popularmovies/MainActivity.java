@@ -1,25 +1,38 @@
 package ajmitchell.android.popularmovies;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import org.json.JSONObject;
 
-import java.lang.reflect.Array;
+import java.util.List;
 
+import ajmitchell.android.popularmovies.adapter.MovieAdapter;
 import ajmitchell.android.popularmovies.model.Movie;
+import ajmitchell.android.popularmovies.utils.Constants;
+import ajmitchell.android.popularmovies.utils.JsonUtils;
+import ajmitchell.android.popularmovies.utils.MovieDataApi;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    String TAG = "MainActivity";
     Button mButton;
+    Movie mMovie;
+    RecyclerView recyclerView;
+    MovieAdapter adapter;
+    List<Movie> movieList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,22 +41,50 @@ public class MainActivity extends AppCompatActivity {
 //        ArrayAdapter<Movie> adapter = new ArrayAdapter<>(this,
 //                android.R.layout.simple_list_item_1,
 //                movies);
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
 //        recyclerView.setAdapter(adapter);
         // here we will set the onclick to the recyclerView instead of the button.
-        mButton = findViewById(R.id.button);
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchMovieInfoActivity();
-            }
-        });
+        getMovies();
+
     }
 
     private void launchMovieInfoActivity() {
         Intent intent = new Intent(this, MovieInfoActivity.class);
         intent.putExtra(MovieInfoActivity.EXTRA_INFO, true);
         startActivity(intent);
+    }
+
+    public void getMovies() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        MovieDataApi movieApi = retrofit.create(MovieDataApi.class);
+
+        Call<List<Movie>> call = movieApi.getMovieList(Constants.API_KEY);
+
+        call.enqueue(new Callback<List<Movie>>() {
+            @Override
+            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
+                if (response.isSuccessful()) {
+                    Movie movie = (Movie) response.body();
+                    //imageUrl = Constants.BASE_IMAGE_URL + Constants.BASE_IMAGE_SIZE +
+                    String moviePath =  movie.getPosterPath();
+                    Log.d(TAG, "onResponse: " + moviePath);
+                } else {
+                    Log.d(TAG, "onResponse: something's wrong");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
+
+            }
+        });
     }
 
 }
