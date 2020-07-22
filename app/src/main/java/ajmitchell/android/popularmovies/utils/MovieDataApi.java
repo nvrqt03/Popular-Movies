@@ -11,9 +11,12 @@ import retrofit2.http.Query;
 import static ajmitchell.android.popularmovies.utils.Constants.API_KEY;
 
 public interface MovieDataApi {
-    @GET("movie/popular")
-    Call<List<Movie>> getMovieList(
-            @Query("api_key") String key
-    );
 
+    @GET("/3/movie/{category}")
+    Call<Movie> getMovies (
+            @Path("category") String category,
+            @Query("api_key") String apiKey,
+            @Query("language") String language,
+            @Query("page") int page
+    );
 }

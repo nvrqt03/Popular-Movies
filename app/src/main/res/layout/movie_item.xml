@@ -5,49 +5,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/title_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:textSize="40sp"
-        android:gravity="center"
-        android:text="Chappie" />
-
-
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_ole_chappie"
-        android:layout_margin="8dp"
-        android:layout_below="@id/title_tv"/>
-
-    <TextView
-        android:id="@+id/release_date_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2015"
-        android:layout_margin="8dp"
-        android:layout_toRightOf="@id/imageView"
-        android:layout_below="@id/title_tv"
-        android:layout_gravity="right"/>
-    <TextView
-        android:id="@+id/vote_avg_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="8.1/10"
-        android:layout_margin="8dp"
-        android:layout_toRightOf="@id/imageView"
-        android:layout_below="@id/release_date_tv"
-        android:gravity="center"/>
-    <TextView
-        android:id="@+id/overView_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="summary about the movie"
-        android:layout_below="@id/vote_avg_tv"
-        android:paddingTop="10dp"/>
+        android:scaleType="fitXY"/>
 
 
 </RelativeLayout>

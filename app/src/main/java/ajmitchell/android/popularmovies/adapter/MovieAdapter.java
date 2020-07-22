@@ -20,14 +20,12 @@ import ajmitchell.android.popularmovies.utils.Constants;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
     private Context context;
-    private List<Movie> mMoviesList;
+    private List<Movie.Result> imageList;
+    private Movie.Result movieResults;
 
-    public MovieAdapter( ) {
-
-    }
-
-    public void setMovie(List<Movie> movies) {
-        mMoviesList = movies;
+    public MovieAdapter(Context context, List images) {
+        this.context = context;
+        this.imageList = images;
     }
 
     @NonNull
@@ -45,8 +43,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         // we want to get a list of the movies from the api - popular movies and highly rated. but we should get a list of those movies.
         // but we want to post those as pics, so we'll be posting the images to our recyclerView
 
-        Movie movie = mMoviesList.get(position);
-        String imageUrl = Constants.BASE_IMAGE_URL + Constants.BASE_IMAGE_SIZE + movie.getPosterPath();
+        movieResults = imageList.get(position);
+        String imageUrl = Constants.BASE_IMAGE_URL + movieResults.getPosterPath();
         Picasso.get()
                 .load(imageUrl)
                 .into(holder.image);
@@ -55,10 +53,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        if (mMoviesList == null) {
+        if (imageList == null) {
             return 0;
         }
-        return mMoviesList.size();
+        return imageList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

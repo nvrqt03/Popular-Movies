@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ajmitchell.android.popularmovies.adapter.MovieAdapter;
@@ -44,13 +45,8 @@ public class MainActivity extends AppCompatActivity {
 //                movies);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        adapter = new MovieAdapter();
-        recyclerView.setAdapter(adapter);
 
-//        recyclerView.setAdapter(adapter);
-        // here we will set the onclick to the recyclerView instead of the button.
         getMovies();
-
     }
 
     private void launchMovieInfoActivity() {
@@ -66,21 +62,25 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         MovieDataApi movieApi = retrofit.create(MovieDataApi.class);
 
-        Call<List<Movie>> call = movieApi.getMovieList(Constants.API_KEY);
 
-        call.enqueue(new Callback<List<Movie>>() {
+
+        Call<Movie> call = movieApi.getMovies(Constants.POPULAR, Constants.API_KEY, Constants.LANGUAGE, Constants.PAGE);
+
+        call.enqueue(new Callback<Movie>() {
             @Override
-            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
-                if (response.isSuccessful()) {
-                    adapter.setMovie(response.body());
-                } else {
-                    Log.d(TAG, "onResponse: something's wrong");
-                }
+            public void onResponse(Call<Movie> call, Response<Movie> response) {
+                Movie movieDetails = response.body();
+                List<Movie.Result> movieList = movieDetails.getResults();
+
+                    adapter = new MovieAdapter(MainActivity.this, movieList);
+                    recyclerView.setAdapter(adapter);
+                    Log.d(TAG, "onResponse: " + movieList.toString());
+
             }
 
             @Override
-            public void onFailure(Call<List<Movie>> call, Throwable t) {
-
+            public void onFailure(Call<Movie> call, Throwable t) {
+                t.printStackTrace();
             }
         });
     }
