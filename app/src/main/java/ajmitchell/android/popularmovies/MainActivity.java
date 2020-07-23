@@ -1,11 +1,14 @@
 package ajmitchell.android.popularmovies;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -26,33 +29,30 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMovieListener {
 
     String TAG = "MainActivity";
     Button mButton;
     Movie mMovie;
     RecyclerView recyclerView;
     MovieAdapter adapter;
-    List<Movie> movieList;
+    List<Movie.Result> movieList;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        ArrayAdapter<Movie> adapter = new ArrayAdapter<>(this,
-//                android.R.layout.simple_list_item_1,
-//                movies);
+        actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        adapter = new MovieAdapter(MainActivity.this, movieList, this);
+        recyclerView.setAdapter(adapter);
 
         getMovies();
-    }
 
-    private void launchMovieInfoActivity() {
-        Intent intent = new Intent(this, MovieInfoActivity.class);
-        intent.putExtra(MovieInfoActivity.EXTRA_INFO, true);
-        startActivity(intent);
+
     }
 
     public void getMovies() {
@@ -62,20 +62,16 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         MovieDataApi movieApi = retrofit.create(MovieDataApi.class);
 
-
-
         Call<Movie> call = movieApi.getMovies(Constants.POPULAR, Constants.API_KEY, Constants.LANGUAGE, Constants.PAGE);
 
         call.enqueue(new Callback<Movie>() {
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 Movie movieDetails = response.body();
-                List<Movie.Result> movieList = movieDetails.getResults();
+                movieList = movieDetails.getResults();
 
-                    adapter = new MovieAdapter(MainActivity.this, movieList);
+                    adapter = new MovieAdapter(MainActivity.this, movieList, adapter.mOnMovieListener);
                     recyclerView.setAdapter(adapter);
-                    Log.d(TAG, "onResponse: " + movieList.toString());
-
             }
 
             @Override
@@ -85,4 +81,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onMovieClick(int position) {
+        Intent intent = new Intent(MainActivity.this, MovieDetailsActivity.class);
+        intent.putExtra("Movie Details", movieList.get(position));
+        startActivity(intent);
+    }
+
+//    private void launchMovieInfoActivity(int position) {
+//        Intent intent = new Intent(this, MovieDetailsActivity.class);
+//        intent.putExtra(MovieDetailsActivity.EXTRA_POSITION, position);
+//        startActivity(intent);
+//    }
 }

@@ -22,10 +22,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     private Context context;
     private List<Movie.Result> imageList;
     private Movie.Result movieResults;
+    public OnMovieListener mOnMovieListener;
 
-    public MovieAdapter(Context context, List images) {
+    public MovieAdapter(Context context, List images, OnMovieListener onMovieListener) {
         this.context = context;
         this.imageList = images;
+        this.mOnMovieListener = onMovieListener;
     }
 
     @NonNull
@@ -34,7 +36,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View itemView = inflater.inflate(R.layout.movie_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(itemView);
+        ViewHolder viewHolder = new ViewHolder(itemView, mOnMovieListener);
         return viewHolder;
     }
 
@@ -59,24 +61,27 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return imageList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        OnMovieListener onMovieListener;
         public ImageView image;
-//        public TextView title;
-//        public TextView posterPath;
-//        public TextView overView;
-//        public TextView voteAvg;
-//        public TextView releaseDate;
 
-
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnMovieListener onMovieListener) {
             super(itemView);
+            this.onMovieListener = onMovieListener;
 
             image = itemView.findViewById(R.id.imageView);
-//            title =  itemView.findViewById(R.id.title_tv);
-//            overView = itemView.findViewById(R.id.overView_tv);
-//            voteAvg = itemView.findViewById(R.id.vote_avg_tv);
-//            releaseDate = itemView.findViewById(R.id.release_date_tv);
+
+            itemView.setOnClickListener(this);
 
         }
+
+        @Override
+        public void onClick(View v) {
+            onMovieListener.onMovieClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnMovieListener {
+        void onMovieClick(int position);
     }
 }
