@@ -1,5 +1,6 @@
 package ajmitchell.android.popularmovies;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -11,6 +12,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 
 import org.json.JSONObject;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     MovieAdapter adapter;
     List<Movie.Result> movieList;
     ActionBar actionBar;
+    String option = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +54,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         adapter = new MovieAdapter(MainActivity.this, movieList, this);
         recyclerView.setAdapter(adapter);
 
-        getMovies();
+        getMovies(Constants.POPULAR);
 
 
     }
 
-    public void getMovies() {
+    public void getMovies(String category) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         MovieDataApi movieApi = retrofit.create(MovieDataApi.class);
-
-        Call<Movie> call = movieApi.getMovies(Constants.POPULAR, Constants.API_KEY, Constants.LANGUAGE, Constants.PAGE);
+        Call<Movie> call = movieApi.getMovies(category, Constants.API_KEY, Constants.LANGUAGE, Constants.PAGE);
 
         call.enqueue(new Callback<Movie>() {
             @Override
@@ -70,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
                 Movie movieDetails = response.body();
                 movieList = movieDetails.getResults();
 
-                    adapter = new MovieAdapter(MainActivity.this, movieList, adapter.mOnMovieListener);
-                    recyclerView.setAdapter(adapter);
+                adapter = new MovieAdapter(MainActivity.this, movieList, adapter.mOnMovieListener);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -88,9 +91,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         startActivity(intent);
     }
 
-//    private void launchMovieInfoActivity(int position) {
-//        Intent intent = new Intent(this, MovieDetailsActivity.class);
-//        intent.putExtra(MovieDetailsActivity.EXTRA_POSITION, position);
-//        startActivity(intent);
-//    }
-}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.popular_item:
+                getMovies(Constants.POPULAR);
+                return true;
+            case R.id.highest_rated:
+                getMovies(Constants.TOP_RATED);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    }

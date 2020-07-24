@@ -50,6 +50,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Picasso.get()
                 .load(imageUrl)
                 .into(holder.image);
+        Picasso.get()
+                .setLoggingEnabled(true);
 
     }
 
