@@ -18,4 +18,8 @@
 
 ![pixel popular movies](https://user-images.githubusercontent.com/22177989/89429734-8b4a5680-d703-11ea-9859-5451ceda6526.png)
 ![pixel popular movies details](https://user-images.githubusercontent.com/22177989/89429741-8dacb080-d703-11ea-9ae1-637bb9a64e78.png)
-# popular-and-highly-rated-movies
+
+# New Features - coming soon
+* Adding Upcoming movies
+* Incorporating movie trailers
+* Allowing user to save favorite movies
