@@ -58,6 +58,13 @@
                 android:paddingTop="10dp"
                 android:textSize="15sp" />
 
+            <VideoView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/video_view"
+                android:layout_below="@id/overView_tv"
+                android:layout_marginTop="15dp"/>
+
         </RelativeLayout>
     </ScrollView>
 

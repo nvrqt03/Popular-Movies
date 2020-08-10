@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     List<Movie.Result> movieList;
     ActionBar actionBar;
     String option = "";
+    int mMovieId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 Movie movieDetails = response.body();
                 movieList = movieDetails.getResults();
-
                 adapter = new MovieAdapter(MainActivity.this, movieList, adapter.mOnMovieListener);
                 recyclerView.setAdapter(adapter);
             }
