@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Popular Movies</string>
 
-    <string name="temp_description">In the near future, a mechanized police force patrols the streets and deals with lawbreakers -- but now, the people are fighting back. When one police droid is stolen and given new programming, he acquires the ability to feel and think for himself. While the robot, dubbed "Chappie (Sharlto Copley)," puzzles out human behavior, the authorities begin to see him as a danger to mankind and order; they will stop at nothing to ensure that Chappie is the last of his kind.</string>
     <string name="temp_date">2015</string>
     <string name="temp_score">8.1/10</string>
     <string name="title_activity_movie_details">Movie Details</string>
     <string name="options">Options</string>
     <string name="popular">Popular</string>
     <string name="highestRated">Highest Rated</string>
+    <string name="comingSoon">Coming Soon</string>
 
 
 </resources>

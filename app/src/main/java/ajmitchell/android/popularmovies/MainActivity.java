@@ -106,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
             case R.id.highest_rated:
                 getMovies(Constants.TOP_RATED);
                 return true;
+            case R.id.coming_soon:
+                getMovies(Constants.COMING_SOON);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

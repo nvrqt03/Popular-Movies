@@ -8,5 +8,6 @@ public class Constants {
     public static final int PAGE = 1;
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
+    public static final String COMING_SOON = "upcoming";
 
 }

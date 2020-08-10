@@ -19,4 +19,11 @@ public interface MovieDataApi {
             @Query("language") String language,
             @Query("page") int page
     );
+
+    @GET("/3/movie/{movie_id}/videos")
+    Call<Movie> getTrailer (
+        @Path("movie_id") int movieId,
+        @Query("api_key") String apiKey,
+        @Query("language") String language
+        );
 }
