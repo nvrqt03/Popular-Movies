@@ -45,8 +45,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         movie = intent.getParcelableExtra("Movie Details");
+        mVideo = intent.getParcelableExtra("Trailer Details");
 
+        movieId = movie.getId();
         populateUi(movie);
+        getTrailer(mVideo);
         String imageUrl = movie.getPosterPath();
         String fullImageUrl = Constants.BASE_IMAGE_URL + imageUrl;
         Picasso.get()
@@ -66,28 +69,24 @@ public class MovieDetailsActivity extends AppCompatActivity {
         TextView overView = findViewById(R.id.overView_tv);
         TextView voteAvg = findViewById(R.id.vote_avg_tv);
         TextView releaseDate = findViewById(R.id.release_date_tv);
-        VideoView videoView = findViewById(R.id.video_view);
 
         Double voteAverage = movieResult.getVoteAverage();
         String voteAvgText = Double.toString(voteAverage) + "/10";
-
-        int id = movieResult.getId();
-        String key = mVideo.getKey();
-        String movieTitle = movieResult.getTitle();
-        String testMovie = "?language=en-us#play=";
-        String movieTrailerPath = Constants.BASE_URL + id + movieTitle + testMovie + key;
-
 
         title.setText(movieResult.getTitle());
         overView.setText(movieResult.getOverview());
         voteAvg.setText(voteAvgText);
         releaseDate.setText(movieResult.getReleaseDate());
+    }
+
+    private void getTrailer(Video.Result key) {
+        VideoView videoView = findViewById(R.id.video_view);
+        String movieTitle = movie.getTitle();
+        String id = mVideo.getId();
+        String testMovie = "?language=en-us#play=";
+        String movieTrailerPath = Constants.BASE_URL + id + movieTitle + testMovie + key;
 
         Uri uri = Uri.parse(movieTrailerPath);
         videoView.setVideoURI(uri);
-    }
-
-    private void getTrailer(int key) {
-
     }
 }
