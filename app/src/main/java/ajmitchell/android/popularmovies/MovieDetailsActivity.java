@@ -28,6 +28,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     ActionBar actionBar;
     private int movieId;
     private Video.Result mVideo;
+    VideoView videoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         TextView overView = findViewById(R.id.overView_tv);
         TextView voteAvg = findViewById(R.id.vote_avg_tv);
         TextView releaseDate = findViewById(R.id.release_date_tv);
+        videoView = findViewById(R.id.video_view);
 
         Double voteAverage = movieResult.getVoteAverage();
         String voteAvgText = Double.toString(voteAverage) + "/10";
@@ -80,9 +82,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void getTrailer(Video.Result key) {
-        VideoView videoView = findViewById(R.id.video_view);
+
         String movieTitle = movie.getTitle();
-        String id = mVideo.getId();
+        String id = movie.getId().toString();
         String testMovie = "?language=en-us#play=";
         String movieTrailerPath = Constants.BASE_URL + id + movieTitle + testMovie + key;
 

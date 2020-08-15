@@ -1,4 +1,4 @@
-package ajmitchell.android.popularmovies.utils;
+package ajmitchell.android.popularmovies.apiClients;
 
 import java.util.List;
 
