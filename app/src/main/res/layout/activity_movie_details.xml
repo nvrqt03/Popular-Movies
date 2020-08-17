@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/title_tv"
@@ -14,9 +19,7 @@
             android:padding="30dp"
             android:textColor="@color/white"
             android:textSize="40sp" />
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -58,19 +61,26 @@
                 android:paddingTop="10dp"
                 android:textSize="15sp" />
 
-            <VideoView
+            <TextView
+                android:id="@+id/trailers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/video_view"
                 android:layout_below="@id/overView_tv"
-                android:layout_marginTop="15dp"/>
+                android:layout_margin="12dp"
+                android:gravity="left"
+                android:padding="0dp"
+                android:text="Trailers:"
+                android:textSize="20sp" />
+
 
         </RelativeLayout>
-    </ScrollView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/trailer_recycler_view"/>
 
-</LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trailer_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>

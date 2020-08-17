@@ -35,9 +35,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     MovieAdapter adapter;
     List<Movie.Result> movieList;
     ActionBar actionBar;
-    List<Video.Result> trailer;
-    Retrofit retrofit;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
