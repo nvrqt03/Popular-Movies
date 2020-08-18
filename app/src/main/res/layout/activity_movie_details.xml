@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,6 +11,7 @@
 
         <TextView
             android:id="@+id/title_tv"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
@@ -18,7 +19,7 @@
             android:gravity="left"
             android:padding="30dp"
             android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:textSize="44sp" />
 
 
         <RelativeLayout
@@ -69,6 +70,7 @@
                 android:layout_margin="12dp"
                 android:gravity="left"
                 android:padding="0dp"
+                android:textStyle="bold"
                 android:text="Trailers:"
                 android:textSize="20sp" />
 
@@ -79,8 +81,22 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trailer_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin ="12dp"
+            android:text="Reviews:"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/review_recyclerView"
+            android:nestedScrollingEnabled="false"/>
 
     </LinearLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
