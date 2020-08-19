@@ -1,15 +1,12 @@
 package ajmitchell.android.popularmovies.apiClients;
 
-import java.util.List;
-
 import ajmitchell.android.popularmovies.model.Movie;
+import ajmitchell.android.popularmovies.model.Review;
 import ajmitchell.android.popularmovies.model.Video;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
-import static ajmitchell.android.popularmovies.utils.Constants.API_KEY;
 
 public interface MovieDataApi {
 
@@ -28,5 +25,12 @@ public interface MovieDataApi {
         @Query("language") String language
         );
 
+    @GET("/3/movie/{movie_id}/reviews")
+    Call<Review> getReviews (
+            @Path("movie_id") int movieId,
+            @Query("api_key") String apiKey,
+            @Query("language") String language,
+            @Query("page") int page
+    );
 
 }

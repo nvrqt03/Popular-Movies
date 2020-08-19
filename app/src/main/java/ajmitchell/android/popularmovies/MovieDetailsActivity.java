@@ -17,10 +17,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import ajmitchell.android.popularmovies.adapter.ReviewAdapter;
 import ajmitchell.android.popularmovies.adapter.TrailerAdapter;
 import ajmitchell.android.popularmovies.apiClients.MovieApiClient;
 import ajmitchell.android.popularmovies.apiClients.MovieDataApi;
 import ajmitchell.android.popularmovies.model.Movie;
+import ajmitchell.android.popularmovies.model.Review;
 import ajmitchell.android.popularmovies.model.Video;
 import ajmitchell.android.popularmovies.utils.Constants;
 import retrofit2.Call;
@@ -34,8 +36,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     private int movieId;
     private Video.Result mVideo;
     private List<Video.Result> trailers;
-    TrailerAdapter adapter;
-    RecyclerView recyclerView;
+    private List<Review.Result> reviews;
+    TrailerAdapter trailerAdapter;
+    RecyclerView trailerRecyclerView;
+    RecyclerView reviewRecyclerView;
+    ReviewAdapter reviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +61,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
         movieId = movie.getId();
 
+        getReviews(movieId);
         getTrailers(movieId);
-        populateUi(movie);
-
+        getOverview(movie);
 
         String imageUrl = movie.getPosterPath();
         String fullImageUrl = Constants.BASE_IMAGE_URL + imageUrl;
@@ -73,7 +78,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         Toast.makeText(this, "Data not available", Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUi(Movie.Result movieResult) {
+    private void getOverview(Movie.Result movieResult) {
 
         TextView title = findViewById(R.id.title_tv);
         TextView overView = findViewById(R.id.overView_tv);
@@ -81,10 +86,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         TextView releaseDate = findViewById(R.id.release_date_tv);
 
 
-        recyclerView = findViewById(R.id.trailer_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TrailerAdapter(MovieDetailsActivity.this, trailers, this);
-        recyclerView.setAdapter(adapter);
+        trailerRecyclerView = findViewById(R.id.trailer_recyclerView);
+        trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        trailerAdapter = new TrailerAdapter(MovieDetailsActivity.this, trailers, this);
+        trailerRecyclerView.setAdapter(trailerAdapter);
+
+        reviewRecyclerView = findViewById(R.id.review_recyclerView);
+        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reviewAdapter = new ReviewAdapter(MovieDetailsActivity.this, reviews);
+        reviewRecyclerView.setAdapter(reviewAdapter);
 
         Double voteAverage = movieResult.getVoteAverage();
         String voteAvgText = Double.toString(voteAverage) + "/10";
@@ -93,8 +103,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         overView.setText(movieResult.getOverview());
         voteAvg.setText(voteAvgText);
         releaseDate.setText(movieResult.getReleaseDate());
-
-
 
     }
 
@@ -109,12 +117,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 Video videoDetails = response.body();
                 trailers = videoDetails.getResults();
 
-                adapter = new TrailerAdapter(
+                trailerAdapter = new TrailerAdapter(
                         MovieDetailsActivity.this,
                         trailers,
-                        adapter.mOnTrailerListener);
+                        trailerAdapter.mOnTrailerListener);
 
-                recyclerView.setAdapter(adapter);
+                trailerRecyclerView.setAdapter(trailerAdapter);
             }
 
             @Override
@@ -129,23 +137,30 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     public void onTrailerClick(int position) {
 
     }
+
+    private void getReviews(int id) {
+        MovieDataApi movieDataApi = MovieApiClient.getMovieDataApi();
+        Call<Review> call = movieDataApi.getReviews(id, Constants.API_KEY, Constants.LANGUAGE, Constants.PAGE);
+
+        call.enqueue(new Callback<Review>() {
+
+            @Override
+            public void onResponse(Call<Review> call, Response<Review> response) {
+                Review reviewDetails = response.body();
+                reviews = reviewDetails.getResults();
+                reviewAdapter = new ReviewAdapter(
+                        MovieDetailsActivity.this,
+                        reviews
+                );
+            }
+
+            @Override
+            public void onFailure(Call<Review> call, Throwable t) {
+                t.printStackTrace();
+            }
+
+        });
+    }
+
+
 }
-//    MovieDataApi movieApi = MovieApiClient.getMovieDataApi();
-//    Call<Movie> call = movieApi.getMovies(category, Constants.API_KEY, Constants.LANGUAGE, Constants.PAGE);
-//
-//        call.enqueue(new Callback<Movie>() {
-//@Override
-//public void onResponse(Call<Movie> call, Response<Movie> response) {
-//        Movie movieDetails = response.body();
-//        movieList = movieDetails.getResults();
-//        adapter = new MovieAdapter(MainActivity.this,
-//        movieList,
-//        adapter.mOnMovieListener);
-//        recyclerView.setAdapter(adapter);
-//        }
-//
-//@Override
-//public void onFailure(Call<Movie> call, Throwable t) {
-//        t.printStackTrace();
-//        }
-//        });
