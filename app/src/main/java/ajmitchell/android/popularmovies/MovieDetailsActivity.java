@@ -9,12 +9,16 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import ajmitchell.android.popularmovies.adapter.ReviewAdapter;
@@ -35,17 +39,28 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     ActionBar actionBar;
     private int movieId;
     private Video.Result mVideo;
-    private List<Video.Result> trailers;
-    private List<Review.Result> reviews;
+    private List<Video.Result> trailerList;
+    private List<Review.Result> reviewList;
     TrailerAdapter trailerAdapter;
     RecyclerView trailerRecyclerView;
     RecyclerView reviewRecyclerView;
     ReviewAdapter reviewAdapter;
+    public static final String TAG = "MovieDetailsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+
+        trailerRecyclerView = findViewById(R.id.trailer_recyclerView);
+        trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        trailerAdapter = new TrailerAdapter(MovieDetailsActivity.this, trailerList, this);
+        trailerRecyclerView.setAdapter(trailerAdapter);
+
+        reviewRecyclerView = findViewById(R.id.review_recyclerView);
+        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reviewAdapter = new ReviewAdapter(MovieDetailsActivity.this, reviewList);
+        reviewRecyclerView.setAdapter(reviewAdapter);
 
         actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
@@ -85,24 +100,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         TextView voteAvg = findViewById(R.id.vote_avg_tv);
         TextView releaseDate = findViewById(R.id.release_date_tv);
 
-
-        trailerRecyclerView = findViewById(R.id.trailer_recyclerView);
-        trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        trailerAdapter = new TrailerAdapter(MovieDetailsActivity.this, trailers, this);
-        trailerRecyclerView.setAdapter(trailerAdapter);
-
-        reviewRecyclerView = findViewById(R.id.review_recyclerView);
-        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        reviewAdapter = new ReviewAdapter(MovieDetailsActivity.this, reviews);
-        reviewRecyclerView.setAdapter(reviewAdapter);
-
         Double voteAverage = movieResult.getVoteAverage();
         String voteAvgText = Double.toString(voteAverage) + "/10";
 
         title.setText(movieResult.getTitle());
         overView.setText(movieResult.getOverview());
         voteAvg.setText(voteAvgText);
-        releaseDate.setText(movieResult.getReleaseDate());
+
+        String date = movieResult.getReleaseDate();
+        String[] dateParts = date.split("-");
+        String year = dateParts[0];
+        releaseDate.setText(year);
 
     }
 
@@ -115,11 +123,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             @Override
             public void onResponse(Call<Video> call, Response<Video> response) {
                 Video videoDetails = response.body();
-                trailers = videoDetails.getResults();
+                trailerList = videoDetails.getResults();
 
                 trailerAdapter = new TrailerAdapter(
                         MovieDetailsActivity.this,
-                        trailers,
+                        trailerList,
                         trailerAdapter.mOnTrailerListener);
 
                 trailerRecyclerView.setAdapter(trailerAdapter);
@@ -147,11 +155,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             @Override
             public void onResponse(Call<Review> call, Response<Review> response) {
                 Review reviewDetails = response.body();
-                reviews = reviewDetails.getResults();
+                reviewList = reviewDetails.getResults();
+                Log.d(TAG, "onResponse: " + reviewList.toString());
                 reviewAdapter = new ReviewAdapter(
                         MovieDetailsActivity.this,
-                        reviews
-                );
+                        reviewList);
+                reviewRecyclerView.setAdapter(reviewAdapter);
             }
 
             @Override

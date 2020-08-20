@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -49,6 +51,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         String imageUrl = Constants.BASE_IMAGE_URL + movieResults.getPosterPath();
         Picasso.get()
                 .load(imageUrl)
+                //.resize(800, 1100)
+                //.centerInside()
                 .into(holder.image);
         Picasso.get()
                 .setLoggingEnabled(true);

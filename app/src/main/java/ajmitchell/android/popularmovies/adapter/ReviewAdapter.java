@@ -40,8 +40,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         reviewResults = reviewList.get(position);
         TextView reviewTextView = holder.revTextView.findViewById(R.id.review_content);
         TextView authorTextView = holder.authTextView.findViewById(R.id.review_author);
+
         reviewTextView.setText(reviewResults.getContent());
         authorTextView.setText(reviewResults.getAuthor());
+
     }
 
 
