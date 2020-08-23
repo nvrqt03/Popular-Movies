@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -33,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetailsActivity extends AppCompatActivity implements TrailerAdapter.OnTrailerListener{
+public class MovieDetailsActivity extends AppCompatActivity implements TrailerAdapter.OnTrailerListener {
 
     private Movie.Result movie;
     ActionBar actionBar;
@@ -144,6 +145,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     @Override
     public void onTrailerClick(int position) {
 
+        Video.Result trailer = trailerList.get(position);
+        String key = trailer.getKey();
+        String youtube = "https://www.youtube.com/watch?v=";
+        Uri.parse(youtube + key);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube + key));
+//        intent.putExtra("Trailer", Uri.parse(youtube + key));
+        startActivity(intent);
     }
 
     private void getReviews(int id) {
