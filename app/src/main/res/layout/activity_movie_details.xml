@@ -36,7 +36,6 @@
                 android:id="@+id/release_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_margin="5dp"
                 android:layout_toRightOf="@id/imageView"
                 android:gravity="center"
@@ -46,12 +45,23 @@
                 android:id="@+id/vote_avg_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_below="@id/release_date_tv"
                 android:layout_margin="5dp"
                 android:layout_toRightOf="@id/imageView"
                 android:gravity="center"
                 android:textSize="25sp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/vote_avg_tv"
+                android:layout_toRightOf="@id/imageView"
+                android:layout_margin="5dp"
+                android:id="@+id/favorites"
+                android:gravity="center"
+                android:src="@drawable/ic_favorite_border_24"
+                android:background="@null"
+                android:onClick="onClick"/>
 
             <TextView
                 android:id="@+id/overView_tv"

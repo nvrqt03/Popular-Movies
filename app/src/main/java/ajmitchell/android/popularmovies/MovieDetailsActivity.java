@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetailsActivity extends AppCompatActivity implements TrailerAdapter.OnTrailerListener {
+public class MovieDetailsActivity extends AppCompatActivity implements TrailerAdapter.OnTrailerListener, View.OnClickListener {
 
     private Movie.Result movie;
     ActionBar actionBar;
@@ -46,6 +49,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     RecyclerView trailerRecyclerView;
     RecyclerView reviewRecyclerView;
     ReviewAdapter reviewAdapter;
+
+
     public static final String TAG = "MovieDetailsActivity";
 
     @Override
@@ -179,5 +184,24 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         });
     }
 
+    public void saveToFavorites() {
 
+
+
+
+
+    }
+
+//    @Override
+//    public void onClick(View v) {
+//        int filled = R.drawable.ic_favorite_filled_24;
+//        int border = R.drawable.ic_favorite_border_24;
+//
+//        ImageButton favoriteImage = findViewById(R.id.favorites);
+//
+////        int filledResource = (int) favoriteImage.getTag(filled);
+////        int borderResource = (int) favoriteImage.getTag(border);
+//
+//
+//    }
 }

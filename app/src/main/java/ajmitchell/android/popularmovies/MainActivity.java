@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     List<Movie.Result> movieList;
     ActionBar actionBar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
                 getMovies(Constants.POPULAR);
                 return true;
             case R.id.highest_rated:
-                getMovies(Constants.TOP_RATED);
+                getMovies(Constants.HIGHEST_RATED);
                 return true;
             case R.id.coming_soon:
                 getMovies(Constants.COMING_SOON);
