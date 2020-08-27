@@ -43,11 +43,18 @@ dependencies {
     dependencies {
         def lifecycle_version = "2.2.0"
         def arch_version = "2.1.0"
+        def room_version = "2.2.5"
 
         // ViewModel
         implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
         // LiveData
         implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
+        // Annotation processor
+        annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+        implementation "androidx.room:room-runtime:$room_version"
+        annotationProcessor "androidx.room:room-compiler:$room_version"
 
         // RecyclerView
         implementation "androidx.recyclerview:recyclerview:1.1.0"
