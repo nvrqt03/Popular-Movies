@@ -37,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetailsActivity extends AppCompatActivity implements TrailerAdapter.OnTrailerListener, View.OnClickListener {
+public class MovieDetailsActivity extends AppCompatActivity implements TrailerAdapter.OnTrailerListener {
 
     private Movie.Result movie;
     ActionBar actionBar;
@@ -49,7 +49,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     RecyclerView trailerRecyclerView;
     RecyclerView reviewRecyclerView;
     ReviewAdapter reviewAdapter;
-
 
     public static final String TAG = "MovieDetailsActivity";
 
@@ -79,12 +78,26 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         }
 
         movie = intent.getParcelableExtra("Movie Details");
-
         movieId = movie.getId();
 
         getReviews(movieId);
         getTrailers(movieId);
         getOverview(movie);
+
+        ImageButton favoriteImage = findViewById(R.id.favorites);
+        favoriteImage.setOnClickListener(new View.OnClickListener() {
+            int heartButton = 0;
+            @Override
+            public void onClick(View v) {
+                if (heartButton == 0) {
+                    favoriteImage.setImageResource(R.drawable.ic_favorite_filled_24);
+                    heartButton = 1;
+                } else if (heartButton == 1) {
+                    favoriteImage.setImageResource(R.drawable.ic_favorite_border_24);
+                    heartButton = 0;
+                }
+            }
+        });
 
         String imageUrl = movie.getPosterPath();
         String fullImageUrl = Constants.BASE_IMAGE_URL + imageUrl;
@@ -155,16 +168,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         String youtube = "https://www.youtube.com/watch?v=";
         Uri.parse(youtube + key);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube + key));
-//        intent.putExtra("Trailer", Uri.parse(youtube + key));
         startActivity(intent);
     }
 
     private void getReviews(int id) {
         MovieDataApi movieDataApi = MovieApiClient.getMovieDataApi();
         Call<Review> call = movieDataApi.getReviews(id, Constants.API_KEY, Constants.LANGUAGE, Constants.PAGE);
-
         call.enqueue(new Callback<Review>() {
-
             @Override
             public void onResponse(Call<Review> call, Response<Review> response) {
                 Review reviewDetails = response.body();
@@ -180,28 +190,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             public void onFailure(Call<Review> call, Throwable t) {
                 t.printStackTrace();
             }
-
         });
     }
-
-    public void saveToFavorites() {
-
-
-
-
-
-    }
-
-//    @Override
-//    public void onClick(View v) {
-//        int filled = R.drawable.ic_favorite_filled_24;
-//        int border = R.drawable.ic_favorite_border_24;
-//
-//        ImageButton favoriteImage = findViewById(R.id.favorites);
-//
-////        int filledResource = (int) favoriteImage.getTag(filled);
-////        int borderResource = (int) favoriteImage.getTag(border);
-//
-//
-//    }
 }

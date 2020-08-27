@@ -94,9 +94,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
                 return true;
             case R.id.highest_rated:
                 getMovies(Constants.HIGHEST_RATED);
+                actionBar.setTitle("Highest Rated");
                 return true;
             case R.id.coming_soon:
                 getMovies(Constants.COMING_SOON);
+                actionBar.setTitle("Coming Soon");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
