@@ -3,12 +3,20 @@ package ajmitchell.android.popularmovies.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity(tableName = "movie_table")
 public class Movie {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
     @SerializedName("page")
     @Expose
@@ -22,6 +30,10 @@ public class Movie {
     @SerializedName("total_pages")
     @Expose
     private Integer totalPages;
+
+    public Movie() {}
+
+    @Embedded Result result; // ??? looking to have the table Movie have columns represented in Result. We'll see!
 
     public Integer getPage() {
         return page;

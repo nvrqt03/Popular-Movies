@@ -3,12 +3,19 @@ package ajmitchell.android.popularmovies.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity
 public class Review {
+
+        @PrimaryKey(autoGenerate = true)
+        public int roomId;
 
         @SerializedName("id")
         @Expose
@@ -25,6 +32,8 @@ public class Review {
         @SerializedName("total_results")
         @Expose
         private Integer totalResults;
+
+        public Review() {}
 
         public Integer getId() {
             return id;

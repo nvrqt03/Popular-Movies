@@ -4,12 +4,19 @@ package ajmitchell.android.popularmovies.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Video {
+
+    @PrimaryKey(autoGenerate = true)
+    public int roomId;
 
     @SerializedName("id")
     @Expose
@@ -17,6 +24,8 @@ public class Video {
     @SerializedName("results")
     @Expose
     private List<Result> results = null;
+
+    public Video() {}
 
     public Integer getId() {
         return id;
