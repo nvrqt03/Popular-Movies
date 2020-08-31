@@ -3,6 +3,7 @@ package ajmitchell.android.popularmovies;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +21,7 @@ import ajmitchell.android.popularmovies.apiClients.MovieApiClient;
 import ajmitchell.android.popularmovies.model.Movie;
 import ajmitchell.android.popularmovies.utils.Constants;
 import ajmitchell.android.popularmovies.apiClients.MovieDataApi;
+import ajmitchell.android.popularmovies.utils.MovieDatabase;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     MovieAdapter adapter;
     List<Movie.Result> movieList;
     ActionBar actionBar;
+    MovieDatabase mDb;
 
 
     @Override
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new MovieAdapter(MainActivity.this, movieList, this);
         recyclerView.setAdapter(adapter);
-
+        mDb = MovieDatabase.getInstance(getApplicationContext());
         getMovies(Constants.POPULAR);
 
     }
@@ -100,9 +103,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
                 getMovies(Constants.COMING_SOON);
                 actionBar.setTitle("Coming Soon");
                 return true;
+            case R.id.favorites:
+                getFavorites();
+                actionBar.setTitle("Favorites");
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void getFavorites() {
+        List<Movie.Result> movieList = mDb.movieDao().getAllMovies();
+        adapter = new MovieAdapter(MainActivity.this,
+                movieList,
+                adapter.mOnMovieListener);
+        recyclerView.setAdapter(adapter);
     }
 
 }

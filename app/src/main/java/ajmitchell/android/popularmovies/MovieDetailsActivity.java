@@ -33,6 +33,7 @@ import ajmitchell.android.popularmovies.model.Movie;
 import ajmitchell.android.popularmovies.model.Review;
 import ajmitchell.android.popularmovies.model.Video;
 import ajmitchell.android.popularmovies.utils.Constants;
+import ajmitchell.android.popularmovies.utils.MovieDatabase;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,12 +51,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     RecyclerView reviewRecyclerView;
     ReviewAdapter reviewAdapter;
 
+    private MovieDatabase mDb;
+
     public static final String TAG = "MovieDetailsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+
+        mDb = MovieDatabase.getInstance(getApplicationContext());
 
         trailerRecyclerView = findViewById(R.id.trailer_recyclerView);
         trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -86,14 +91,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
         ImageButton favoriteImage = findViewById(R.id.favorites);
         favoriteImage.setOnClickListener(new View.OnClickListener() {
-            int heartButton = 0;
+            int heartButton;
             @Override
             public void onClick(View v) {
                 if (heartButton == 0) {
                     favoriteImage.setImageResource(R.drawable.ic_favorite_filled_24);
+                    saveToFavorites();
                     heartButton = 1;
                 } else if (heartButton == 1) {
                     favoriteImage.setImageResource(R.drawable.ic_favorite_border_24);
+                    removeFromFavorites();
                     heartButton = 0;
                 }
             }
@@ -192,4 +199,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             }
         });
     }
+
+    public void saveToFavorites() {
+        mDb.movieDao().insertMovie(movie);
+        Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void removeFromFavorites() {
+        mDb.movieDao().delete(movie);
+        Toast.makeText(this, "removed from favorites", Toast.LENGTH_SHORT).show();
+
+    }
+
 }

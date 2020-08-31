@@ -1,6 +1,7 @@
 package ajmitchell.android.popularmovies;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -10,20 +11,21 @@ import java.util.List;
 
 import ajmitchell.android.popularmovies.model.Movie;
 
+@Dao
 public interface MovieDao {
-    @Query("SELECT * FROM movie_table ORDER BY releaseDate")
-    LiveData<List<Movie>> getAllMovies();
+    @Query("SELECT * FROM movie_results_table ORDER BY releaseDate")
+    List<Movie.Result> getAllMovies();
 
     @Insert
-    void insertMovie(Movie movie);
+    void insertMovie(Movie.Result movie);
 
-    @Update
-    void updateMovie(Movie movie);
+//    @Update
+//    void updateMovie(Movie.Result movie);
 
     @Delete
-    void delete(Movie movie);
+    void delete(Movie.Result movie);
 
-    @Query("DELETE FROM movie_table")
+    @Query("DELETE FROM movie_results_table")
     void deleteAllMovies();
 }
 

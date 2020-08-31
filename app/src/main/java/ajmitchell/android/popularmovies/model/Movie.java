@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -15,14 +16,15 @@ import java.util.List;
 @Entity(tableName = "movie_table")
 public class Movie {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+//    @PrimaryKey(autoGenerate = true)
+//    private int movieId;
 
     @SerializedName("page")
     @Expose
     private Integer page;
     @SerializedName("results")
     @Expose
+    @Ignore
     private List<Result> results = null;
     @SerializedName("total_results")
     @Expose
@@ -33,7 +35,11 @@ public class Movie {
 
     public Movie() {}
 
-    @Embedded Result result; // ??? looking to have the table Movie have columns represented in Result. We'll see!
+    //@Embedded Result result; // ??? looking to have the table Movie have columns represented in Result. We'll see!
+
+//    public int getMovieId() { return movieId; }
+//
+//    public void setMovieId(int id) { this.movieId = id; }
 
     public Integer getPage() {
         return page;
@@ -67,7 +73,11 @@ public class Movie {
         this.totalPages = totalPages;
     }
 
+    @Entity(tableName = "movie_results_table")
     public static class Result implements Parcelable {
+
+        @PrimaryKey(autoGenerate = true)
+        private int columnId;
 
         @SerializedName("poster_path")
         @Expose
@@ -81,8 +91,10 @@ public class Movie {
         @SerializedName("release_date")
         @Expose
         private String releaseDate;
+
         @SerializedName("genre_ids")
         @Expose
+        @Ignore
         private List<Integer> genreIds = null;
         @SerializedName("id")
         @Expose
@@ -111,6 +123,16 @@ public class Movie {
         @SerializedName("vote_average")
         @Expose
         private Double voteAverage;
+
+        public Result() {
+        }
+        public int getColumnId() {
+            return columnId;
+        }
+
+        public void setColumnId(int columnId) {
+            this.columnId = columnId;
+        }
 
         protected Result(Parcel in) {
             posterPath = in.readString();
