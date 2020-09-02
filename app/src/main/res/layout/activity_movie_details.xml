@@ -11,7 +11,6 @@
 
         <TextView
             android:id="@+id/title_tv"
-            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
@@ -19,7 +18,8 @@
             android:gravity="left"
             android:padding="30dp"
             android:textColor="@color/white"
-            android:textSize="44sp" />
+            android:textSize="44sp"
+            android:textStyle="bold" />
 
 
         <RelativeLayout
@@ -51,16 +51,19 @@
                 android:gravity="center"
                 android:textSize="25sp" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/vote_avg_tv"
-                android:layout_toRightOf="@id/imageView"
-                android:layout_margin="5dp"
+            <ToggleButton
                 android:id="@+id/favorites"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/vote_avg_tv"
+                android:layout_margin="5dp"
+                android:layout_toRightOf="@id/imageView"
+                android:background="@drawable/favorite"
                 android:gravity="center"
-                android:src="@drawable/ic_favorite_border_24"
-                android:background="@null" />
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+
 
             <TextView
                 android:id="@+id/overView_tv"
@@ -79,9 +82,9 @@
                 android:layout_margin="12dp"
                 android:gravity="left"
                 android:padding="0dp"
-                android:textStyle="bold"
                 android:text="Trailers:"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
 
         </RelativeLayout>
@@ -91,21 +94,21 @@
             android:id="@+id/trailer_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"/>
+            android:nestedScrollingEnabled="false" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin ="12dp"
+            android:layout_margin="12dp"
             android:text="Reviews:"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/review_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/review_recyclerView"
-            android:nestedScrollingEnabled="false"/>
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,10 +14,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
@@ -89,20 +93,19 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         getTrailers(movieId);
         getOverview(movie);
 
-        ImageButton favoriteImage = findViewById(R.id.favorites);
-        favoriteImage.setOnClickListener(new View.OnClickListener() {
-            int heartButton;
+        ToggleButton favoriteImage = findViewById(R.id.favorites);
+
+        favoriteImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (heartButton == 0) {
-                    favoriteImage.setImageResource(R.drawable.ic_favorite_filled_24);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
                     saveToFavorites();
-                    heartButton = 1;
-                } else if (heartButton == 1) {
-                    favoriteImage.setImageResource(R.drawable.ic_favorite_border_24);
+
+                } else if (!isChecked) {
                     removeFromFavorites();
-                    heartButton = 0;
                 }
+
             }
         });
 
@@ -201,15 +204,25 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     }
 
     public void saveToFavorites() {
-        mDb.movieDao().insertMovie(movie);
-        Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
 
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.movieDao().insertMovie(movie);
+            }
+        });
+        Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
     }
 
     public void removeFromFavorites() {
-        mDb.movieDao().delete(movie);
-        Toast.makeText(this, "removed from favorites", Toast.LENGTH_SHORT).show();
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.movieDao().delete(movie);
+            }
+        });
 
+        Toast.makeText(this, "removed from favorites", Toast.LENGTH_SHORT).show();
     }
 
 }

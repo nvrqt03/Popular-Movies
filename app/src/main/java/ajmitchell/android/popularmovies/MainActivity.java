@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         switch (item.getItemId()) {
             case R.id.popular_item:
                 getMovies(Constants.POPULAR);
+                actionBar.setTitle("Popular");
                 return true;
             case R.id.highest_rated:
                 getMovies(Constants.HIGHEST_RATED);
@@ -113,11 +114,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     }
 
     public void getFavorites() {
-        List<Movie.Result> movieList = mDb.movieDao().getAllMovies();
-        adapter = new MovieAdapter(MainActivity.this,
-                movieList,
-                adapter.mOnMovieListener);
-        recyclerView.setAdapter(adapter);
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<Movie.Result> movieList = mDb.movieDao().getAllMovies();
+                adapter = new MovieAdapter(MainActivity.this,
+                        movieList,
+                        adapter.mOnMovieListener);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
+
+            }
+        });
+
     }
 
 }
