@@ -27,12 +27,9 @@ public abstract class MovieDatabase extends RoomDatabase {
                 Log.d(LOG_TAG, "creating new database instance");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         MovieDatabase.class, MovieDatabase.DATABASE_NAME)
-                        //this is temporary, to make sure database is working
-                        //.allowMainThreadQueries()
                         .build();
             }
         }
-        Log.d(LOG_TAG, "getting the database instance");
         return sInstance;
     }
     public abstract MovieDao movieDao();

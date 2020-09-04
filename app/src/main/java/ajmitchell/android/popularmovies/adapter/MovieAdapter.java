@@ -23,7 +23,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     private Context context;
     private List<Movie.Result> imageList;
-    private Movie.Result movieResults;
     public OnMovieListener mOnMovieListener;
 
     public MovieAdapter(Context context, List images, OnMovieListener onMovieListener) {
@@ -47,7 +46,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         // we want to get a list of the movies from the api - popular movies and highly rated. but we should get a list of those movies.
         // but we want to post those as pics, so we'll be posting the images to our recyclerView
 
-        movieResults = imageList.get(position);
+        Movie.Result movieResults = imageList.get(position);
         String imageUrl = Constants.BASE_IMAGE_URL + movieResults.getPosterPath();
         Picasso.get()
                 .load(imageUrl)
@@ -67,12 +66,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return imageList.size();
     }
 
-    public Movie.Result getPositionMovie() {
-        return movieResults;
-    }
-
     public void setMovies(List<Movie.Result> movieEntries) {
-        imageList = movieEntries;
+        this.imageList = movieEntries;
         notifyDataSetChanged();
     }
 

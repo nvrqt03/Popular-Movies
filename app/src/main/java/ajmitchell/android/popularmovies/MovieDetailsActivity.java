@@ -93,6 +93,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         movie = intent.getParcelableExtra("Movie Details");
         movieId = movie.getId();
 
+
         getReviews(movieId);
         getTrailers(movieId);
         getOverview(movie);
@@ -112,13 +113,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
             }
         });
-
-//        favoriteImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
 
         String imageUrl = movie.getPosterPath();
         fullImageUrl = Constants.BASE_IMAGE_URL + imageUrl;
