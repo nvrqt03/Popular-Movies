@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import ajmitchell.android.popularmovies.adapter.MovieAdapter;
 import ajmitchell.android.popularmovies.adapter.ReviewAdapter;
 import ajmitchell.android.popularmovies.adapter.TrailerAdapter;
 import ajmitchell.android.popularmovies.apiClients.MovieApiClient;
@@ -54,8 +56,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     RecyclerView trailerRecyclerView;
     RecyclerView reviewRecyclerView;
     ReviewAdapter reviewAdapter;
-
+    String fullImageUrl;
     private MovieDatabase mDb;
+    private String voteAvgText;
+    MovieAdapter mAdapter;
 
     public static final String TAG = "MovieDetailsActivity";
 
@@ -102,15 +106,22 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 if (isChecked) {
                     saveToFavorites();
 
-                } else if (!isChecked) {
+                } else {
                     removeFromFavorites();
                 }
 
             }
         });
 
+//        favoriteImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
+
         String imageUrl = movie.getPosterPath();
-        String fullImageUrl = Constants.BASE_IMAGE_URL + imageUrl;
+        fullImageUrl = Constants.BASE_IMAGE_URL + imageUrl;
         Picasso.get()
                 .load(fullImageUrl)
                 .into(image);
@@ -122,7 +133,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         Toast.makeText(this, "Data not available", Toast.LENGTH_SHORT).show();
     }
 
-    private void getOverview(Movie.Result movieResult) {
+    private String getOverview(Movie.Result movieResult) {
 
         TextView title = findViewById(R.id.title_tv);
         TextView overView = findViewById(R.id.overView_tv);
@@ -130,7 +141,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         TextView releaseDate = findViewById(R.id.release_date_tv);
 
         Double voteAverage = movieResult.getVoteAverage();
-        String voteAvgText = Double.toString(voteAverage) + "/10";
+        voteAvgText = Double.toString(voteAverage); // <--
 
         title.setText(movieResult.getTitle());
         overView.setText(movieResult.getOverview());
@@ -138,12 +149,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
         String date = movieResult.getReleaseDate();
         String[] dateParts = date.split("-");
-        String year = dateParts[0];
+        String year = dateParts[0]; //<--
         releaseDate.setText(year);
 
+        return movieResult.getOverview();
     }
 
-    private void getTrailers(int id) {
+    private List<Video.Result> getTrailers(int id) {
 
         MovieDataApi movieApi = MovieApiClient.getMovieDataApi();
         Call<Video> call = movieApi.getTrailer(id, Constants.API_KEY, Constants.LANGUAGE);
@@ -167,7 +179,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 t.printStackTrace();
             }
         });
-
+        return trailerList;
     }
 
     @Override
@@ -181,7 +193,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         startActivity(intent);
     }
 
-    private void getReviews(int id) {
+    private List<Review.Result> getReviews(int id) {
         MovieDataApi movieDataApi = MovieApiClient.getMovieDataApi();
         Call<Review> call = movieDataApi.getReviews(id, Constants.API_KEY, Constants.LANGUAGE, Constants.PAGE);
         call.enqueue(new Callback<Review>() {
@@ -201,6 +213,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 t.printStackTrace();
             }
         });
+        return reviewList;
     }
 
     public void saveToFavorites() {
@@ -215,10 +228,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     }
 
     public void removeFromFavorites() {
+
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mDb.movieDao().delete(movie);
+                mDb.movieDao().delete(movie.getId());
             }
         });
 

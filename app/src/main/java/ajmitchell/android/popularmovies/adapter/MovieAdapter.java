@@ -67,6 +67,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return imageList.size();
     }
 
+    public Movie.Result getPositionMovie() {
+        return movieResults;
+    }
+
+    public void setMovies(List<Movie.Result> movieEntries) {
+        imageList = movieEntries;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         OnMovieListener onMovieListener;
         public ImageView image;

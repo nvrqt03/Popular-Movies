@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-@Entity
+@Entity(tableName = "review_table")
 public class Review {
 
         @PrimaryKey(autoGenerate = true)
@@ -75,7 +75,7 @@ public class Review {
             this.totalResults = totalResults;
         }
 
-
+    @Entity(tableName = "review_results_table")
     public static class Result implements Parcelable {
 
         @SerializedName("author")

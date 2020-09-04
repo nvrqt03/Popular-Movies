@@ -12,7 +12,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Entity
+@Entity(tableName = "video_table")
 public class Video {
 
     @PrimaryKey(autoGenerate = true)
@@ -43,6 +43,7 @@ public class Video {
         this.results = results;
     }
 
+    @Entity(tableName = "video_results_table")
     public static class Result implements Parcelable {
 
         @SerializedName("id")

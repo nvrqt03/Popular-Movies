@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     }
 
     public void getFavorites() {
-
+        // the position of the movie in that is selected (i think) is in movieResult in the MovieAdapter
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -128,10 +128,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
                         recyclerView.setAdapter(adapter);
                     }
                 });
-
             }
         });
-
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        adapter.setMovies(mDb.movieDao().getAllMovies());
+//    }
 }

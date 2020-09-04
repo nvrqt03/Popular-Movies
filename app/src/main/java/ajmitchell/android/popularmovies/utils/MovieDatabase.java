@@ -13,7 +13,7 @@ import androidx.room.TypeConverters;
 import ajmitchell.android.popularmovies.MovieDao;
 import ajmitchell.android.popularmovies.model.Movie;
 
-@Database(entities = Movie.Result.class, version = 1, exportSchema = false)
+@Database(entities = {Movie.Result.class}, version = 1, exportSchema = false)
 @TypeConverters(MovieTypeConverter.class)
 public abstract class MovieDatabase extends RoomDatabase {
     public static final String LOG_TAG = MovieDatabase.class.getSimpleName();
