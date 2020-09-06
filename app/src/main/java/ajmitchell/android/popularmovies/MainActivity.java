@@ -47,15 +47,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        movieViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);//.of(this).get(MovieViewModel.class);
-        movieViewModel.getAllMovies().observe(this, new Observer<List<Movie.Result>>() {
-            @Override
-            public void onChanged(List<Movie.Result> results) {
-                //update our recyclerView
-                Toast.makeText(MainActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
-                adapter.setMovies(movieList);
-            }
-        });
+//        movieViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);//.of(this).get(MovieViewModel.class);
+//        movieViewModel.getAllMovies();
 
         actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
@@ -125,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
                 actionBar.setTitle("Coming Soon");
                 return true;
             case R.id.favorites:
-                //getFavorites();
+                getFavorites();
                 actionBar.setTitle("Favorites");
                 return true;
             default:
@@ -133,26 +126,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         }
     }
 
-//    public void getFavorites() {
-//        // the position of the movie in that is selected (i think) is in movieResult in the MovieAdapter
-//        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                final LiveData<List<Movie.Result>> movieList = mDb.movieDao().getAllMovies();
-//                adapter.setMovies(movieList);
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        recyclerView.setAdapter(adapter);
-//                    }
-//                });
-//            }
-//        });
-//    }
+    public void getFavorites() {
+        // the position of the movie in that is selected (i think) is in movieResult in the MovieAdapter
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<Movie.Result> movieList = mDb.movieDao().getAllMovies();
+                adapter.setMovies(movieList);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
+            }
+        });
+    }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        adapter.setMovies(mDb.movieDao().getAllMovies());
-//    }
 }

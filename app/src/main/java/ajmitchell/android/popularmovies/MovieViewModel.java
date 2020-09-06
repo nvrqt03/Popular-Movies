@@ -12,7 +12,7 @@ import ajmitchell.android.popularmovies.model.Movie;
 
 public class MovieViewModel extends AndroidViewModel {
 private MovieRepository repository;
-private LiveData<List<Movie.Result>> allMovies;
+private List<Movie.Result> allMovies;
 
     public MovieViewModel(@NonNull Application application) {
         super(application);
@@ -28,7 +28,7 @@ private LiveData<List<Movie.Result>> allMovies;
         repository.delete(movie);
     }
 
-    public LiveData<List<Movie.Result>> getAllMovies() {
+    public List<Movie.Result> getAllMovies() {
         return allMovies;
     }
 }

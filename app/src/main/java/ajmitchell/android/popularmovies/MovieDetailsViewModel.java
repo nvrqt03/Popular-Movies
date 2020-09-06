@@ -11,7 +11,7 @@ import ajmitchell.android.popularmovies.model.Movie;
 public class MovieDetailsViewModel extends AndroidViewModel {
 
     private MovieRepository repository;
-    private LiveData<Movie.Result> movie;
+    private Movie.Result movie;
 
     public MovieDetailsViewModel(@NonNull Application application, int movieId) {
         super(application);
@@ -19,7 +19,7 @@ public class MovieDetailsViewModel extends AndroidViewModel {
         movie = repository.getMovieById(movieId);
     }
 
-    public LiveData<Movie.Result> getMovie() {
+    public Movie.Result getMovie() {
         return movie;
     }
 
