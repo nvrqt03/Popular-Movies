@@ -34,8 +34,8 @@ public class MovieRepository {
         return allMovies;
     }
 
-    public int getMovieById(Movie.Result movie) {
-        return movie.getId();
+    public LiveData<Movie.Result> getMovieById(int movieId) {
+        return movie;
     }
 
     private static class InsertMovieAsyncTask extends AsyncTask<Movie.Result, Void, Void> {

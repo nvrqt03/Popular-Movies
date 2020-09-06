@@ -13,10 +13,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 import ajmitchell.android.popularmovies.adapter.MovieAdapter;
@@ -92,6 +94,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     @Override
     public void onMovieClick(int position) {
         Movie.Result movie = movieList.get(position);
+        String movietitle = movie.getTitle();
+        Log.d(TAG, "onMovieClick: " + movietitle);
+        Log.d(TAG, "onMovieClick: " + movie.getId());
+        Log.d(TAG, "onMovieClick: " + movieList.indexOf(movie));
         Intent intent = new Intent(MainActivity.this, MovieDetailsActivity.class);
         intent.putExtra("Movie Details", movie);
         startActivity(intent);
