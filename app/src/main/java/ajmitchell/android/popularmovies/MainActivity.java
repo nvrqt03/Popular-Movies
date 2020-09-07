@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     }
 
     @Override
-    public void onMovieClick(int position) {
-        Movie.Result movie = movieList.get(position);
+    public void onMovieClick(Movie.Result movie) { // changed from int position to Movie.Result movie
+        //Movie.Result movie = movieList.get(position);
         String movietitle = movie.getTitle();
         Log.d(TAG, "onMovieClick: " + movietitle);
         Log.d(TAG, "onMovieClick: " + movie.getId());
@@ -127,11 +127,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     }
 
     public void getFavorites() {
-        // the position of the movie in that is selected (i think) is in movieResult in the MovieAdapter
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                final List<Movie.Result> movieList = mDb.movieDao().getAllMovies();
+                movieList = mDb.movieDao().getAllMovies();
                 adapter.setMovies(movieList);
                 runOnUiThread(new Runnable() {
                     @Override

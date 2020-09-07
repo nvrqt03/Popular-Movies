@@ -43,19 +43,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // we want to get a list of the movies from the api - popular movies and highly rated. but we should get a list of those movies.
-        // but we want to post those as pics, so we'll be posting the images to our recyclerView
-
         Movie.Result movieResults = imageList.get(position);
         String imageUrl = Constants.BASE_IMAGE_URL + movieResults.getPosterPath();
         Picasso.get()
                 .load(imageUrl)
-                //.resize(800, 1100)
-                //.centerInside()
                 .into(holder.image);
         Picasso.get()
                 .setLoggingEnabled(true);
-
     }
 
     @Override
@@ -68,7 +62,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     public void setMovies(List<Movie.Result> movieEntries) {
         this.imageList = movieEntries;
-        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -78,20 +71,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView, OnMovieListener onMovieListener) {
             super(itemView);
             this.onMovieListener = onMovieListener;
-
             image = itemView.findViewById(R.id.imageView);
-
             itemView.setOnClickListener(this);
-
         }
 
         @Override
         public void onClick(View v) {
-            onMovieListener.onMovieClick(getAdapterPosition());
+            onMovieListener.onMovieClick(imageList.get(getAdapterPosition()));
         }
     }
 
     public interface OnMovieListener {
-        void onMovieClick(int position);
+        void onMovieClick(Movie.Result movie);
     }
 }
