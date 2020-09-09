@@ -12,7 +12,7 @@ import ajmitchell.android.popularmovies.model.Movie;
 
 public class MovieViewModel extends AndroidViewModel {
 private MovieRepository repository;
-private List<Movie.Result> allMovies;
+private LiveData<List<Movie.Result>> allMovies;
 
     public MovieViewModel(@NonNull Application application) {
         super(application);
@@ -20,15 +20,7 @@ private List<Movie.Result> allMovies;
         allMovies = repository.getAllMovies();
     }
 
-    public void insert(Movie.Result movie) {
-        repository.insert(movie);
-    }
-
-    public void delete(Movie.Result movie) {
-        repository.delete(movie);
-    }
-
-    public List<Movie.Result> getAllMovies() {
+    public LiveData<List<Movie.Result>> getAllMovies() {
         return allMovies;
     }
 }

@@ -17,7 +17,7 @@ import ajmitchell.android.popularmovies.model.Video;
 @Dao
 public interface MovieDao {
     @Query("SELECT * FROM movie_results_table ORDER BY releaseDate")
-    List<Movie.Result> getAllMovies();
+    LiveData<List<Movie.Result>> getAllMovies();
 
     //may need to use @Query to select the specific movie to add
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -27,6 +27,6 @@ public interface MovieDao {
     void delete(int movieId);
 
     @Query("SELECT * FROM movie_results_table WHERE id = :movieId")
-    Movie.Result getMovieById(int movieId);
+    LiveData<Movie.Result> getMovieById(int movieId);
 }
 

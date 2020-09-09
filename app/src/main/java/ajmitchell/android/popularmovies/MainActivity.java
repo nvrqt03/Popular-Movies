@@ -34,11 +34,11 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMovieListener {
 
     String TAG = "MainActivity";
-    RecyclerView recyclerView;
-    MovieAdapter adapter;
-    List<Movie.Result> movieList;
-    ActionBar actionBar;
-    MovieDatabase mDb;
+    private RecyclerView recyclerView;
+    private MovieAdapter adapter;
+    private List<Movie.Result> movieList;
+    private ActionBar actionBar;
+    private MovieDatabase mDb;
     private MovieViewModel movieViewModel;
 
 
@@ -47,11 +47,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        movieViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);//.of(this).get(MovieViewModel.class);
-//        movieViewModel.getAllMovies();
-
         actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
+
+//        movieViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);
+//        movieViewModel.getAllMovies().observe(this, new Observer<List<Movie.Result>>() {
+//            @Override
+//            public void onChanged(List<Movie.Result> results) {
+//                movieViewModel.getAllMovies().removeObserver(this);
+//                adapter.setMovies(results);
+//                recyclerView.setAdapter(adapter);
+//            }
+//        });
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -71,8 +78,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 Movie movieDetails = response.body();
                 movieList = movieDetails.getResults();
+//                for (int i = 0; i < movieList.size(); i++) {
+//                    mDb.movieDao().insertMovie(movieList.get(i));
+//                }
+//                LiveData<List<Movie.Result>> movies = mDb.movieDao().getAllMovies();
                 adapter = new MovieAdapter(MainActivity.this,
-                        movieList,
+                        movieList, //should this be movies from
                         adapter.mOnMovieListener);
                 recyclerView.setAdapter(adapter);
             }
@@ -85,12 +96,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     }
 
     @Override
-    public void onMovieClick(Movie.Result movie) { // changed from int position to Movie.Result movie
-        //Movie.Result movie = movieList.get(position);
-        String movietitle = movie.getTitle();
-        Log.d(TAG, "onMovieClick: " + movietitle);
-        Log.d(TAG, "onMovieClick: " + movie.getId());
-        Log.d(TAG, "onMovieClick: " + movieList.indexOf(movie));
+    public void onMovieClick(Movie.Result movie) {
         Intent intent = new Intent(MainActivity.this, MovieDetailsActivity.class);
         intent.putExtra("Movie Details", movie);
         startActivity(intent);
@@ -127,17 +133,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     }
 
     public void getFavorites() {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        //final LiveData<List<Movie.Result>> favorites = mDb.movieDao().getAllMovies();
+        movieViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);
+        movieViewModel.getAllMovies().observe(this, new Observer<List<Movie.Result>>() {
             @Override
-            public void run() {
-                movieList = mDb.movieDao().getAllMovies();
-                adapter.setMovies(movieList);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setAdapter(adapter);
-                    }
-                });
+            public void onChanged(List<Movie.Result> results) {
+                movieViewModel.getAllMovies().removeObserver(this);
+                adapter.setMovies(results);
+                recyclerView.setAdapter(adapter);
             }
         });
     }

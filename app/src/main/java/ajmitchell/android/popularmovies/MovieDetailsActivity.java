@@ -211,27 +211,22 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     }
 
     public void saveToFavorites() {
-
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 mDb.movieDao().insertMovie(movie);
-                Log.d(TAG, "movie title: " + movie.getTitle());
-                Log.d(TAG, "movie id " + movie.getId());
             }
         });
         Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
     }
 
     public void removeFromFavorites() {
-
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 mDb.movieDao().delete(movie.getId());
             }
         });
-
         Toast.makeText(this, "removed from favorites", Toast.LENGTH_SHORT).show();
     }
 

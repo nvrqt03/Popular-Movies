@@ -15,6 +15,7 @@ import com.squareup.picasso.Target;
 
 import java.util.List;
 
+import ajmitchell.android.popularmovies.MovieRepository;
 import ajmitchell.android.popularmovies.R;
 import ajmitchell.android.popularmovies.model.Movie;
 import ajmitchell.android.popularmovies.utils.Constants;
@@ -25,7 +26,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     private List<Movie.Result> imageList;
     public OnMovieListener mOnMovieListener;
 
-    public MovieAdapter(Context context, List images, OnMovieListener onMovieListener) {
+    public MovieAdapter(Context context, List<Movie.Result> images, OnMovieListener onMovieListener) {
         this.context = context;
         this.imageList = images;
         this.mOnMovieListener = onMovieListener;
@@ -43,7 +44,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Movie.Result movieResults = imageList.get(position);
+        Movie.Result movieResults = imageList.get(position);  // <-- how do I update this if it becomes LiveData? there will be no get() method
         String imageUrl = Constants.BASE_IMAGE_URL + movieResults.getPosterPath();
         Picasso.get()
                 .load(imageUrl)
