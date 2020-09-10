@@ -78,10 +78,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 Movie movieDetails = response.body();
                 movieList = movieDetails.getResults();
-//                for (int i = 0; i < movieList.size(); i++) {
-//                    mDb.movieDao().insertMovie(movieList.get(i));
-//                }
-//                LiveData<List<Movie.Result>> movies = mDb.movieDao().getAllMovies();
                 adapter = new MovieAdapter(MainActivity.this,
                         movieList, //should this be movies from
                         adapter.mOnMovieListener);
@@ -113,19 +109,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         switch (item.getItemId()) {
             case R.id.popular_item:
                 getMovies(Constants.POPULAR);
-                actionBar.setTitle("Popular");
+                actionBar.setTitle(Constants.coming_soon);
                 return true;
             case R.id.highest_rated:
                 getMovies(Constants.HIGHEST_RATED);
-                actionBar.setTitle("Highest Rated");
+                actionBar.setTitle(Constants.highest_rated);
                 return true;
             case R.id.coming_soon:
                 getMovies(Constants.COMING_SOON);
-                actionBar.setTitle("Coming Soon");
+                actionBar.setTitle(Constants.coming_soon);
                 return true;
             case R.id.favorites:
                 getFavorites();
-                actionBar.setTitle("Favorites");
+                actionBar.setTitle(Constants.FAVORITES);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -133,16 +129,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     }
 
     public void getFavorites() {
-        //final LiveData<List<Movie.Result>> favorites = mDb.movieDao().getAllMovies();
+        final LiveData<List<Movie.Result>> favorites = mDb.movieDao().getAllMovies();
         movieViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);
-        movieViewModel.getAllMovies().observe(this, new Observer<List<Movie.Result>>() {
+        favorites.observe(this, new Observer<List<Movie.Result>>() {
             @Override
             public void onChanged(List<Movie.Result> results) {
                 movieViewModel.getAllMovies().removeObserver(this);
                 adapter.setMovies(results);
                 recyclerView.setAdapter(adapter);
+                actionBar.setTitle("Favorites");
             }
         });
+
     }
 
 }

@@ -1,12 +1,17 @@
 package ajmitchell.android.popularmovies;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Icon;
@@ -47,19 +52,19 @@ import retrofit2.Response;
 public class MovieDetailsActivity extends AppCompatActivity implements TrailerAdapter.OnTrailerListener {
 
     private Movie.Result movie;
-    ActionBar actionBar;
+    private ActionBar actionBar;
     private int movieId;
-    private Video.Result mVideo;
     private List<Video.Result> trailerList;
     private List<Review.Result> reviewList;
-    TrailerAdapter trailerAdapter;
-    RecyclerView trailerRecyclerView;
-    RecyclerView reviewRecyclerView;
-    ReviewAdapter reviewAdapter;
-    String fullImageUrl;
+    private TrailerAdapter trailerAdapter;
+    private RecyclerView trailerRecyclerView;
+    private RecyclerView reviewRecyclerView;
+    private ReviewAdapter reviewAdapter;
+    private String fullImageUrl;
     private MovieDatabase mDb;
     private String voteAvgText;
-    MovieAdapter mAdapter;
+    ToggleButton favoriteImage;
+    private MovieDetailsViewModel movieDetailsViewModel;
 
     public static final String TAG = "MovieDetailsActivity";
 
@@ -98,19 +103,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         getTrailers(movieId);
         getOverview(movie);
 
-        ToggleButton favoriteImage = findViewById(R.id.favorites);
+        favoriteImage = findViewById(R.id.favorites);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("selected", MODE_PRIVATE);
+        favoriteImage.setChecked(sharedPreferences.getBoolean("value", false));
 
         favoriteImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 if (isChecked) {
                     saveToFavorites();
-
+                    SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
+                    editor.putBoolean("value", true);
+                    editor.apply();
+                    favoriteImage.setChecked(true);
                 } else {
                     removeFromFavorites();
+                    SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
+                    editor.putBoolean("value", false);
+                    editor.apply();
+                    favoriteImage.setChecked(false);
                 }
-
             }
         });
 
@@ -119,7 +132,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         Picasso.get()
                 .load(fullImageUrl)
                 .into(image);
-
     }
 
     private void closeOnError() {
@@ -181,7 +193,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
         Video.Result trailer = trailerList.get(position);
         String key = trailer.getKey();
-        String youtube = "https://www.youtube.com/watch?v=";
+        String youtube = Constants.YOUTUBE;
         Uri.parse(youtube + key);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtube + key));
         startActivity(intent);

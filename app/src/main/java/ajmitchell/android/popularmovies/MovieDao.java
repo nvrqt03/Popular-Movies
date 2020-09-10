@@ -27,6 +27,6 @@ public interface MovieDao {
     void delete(int movieId);
 
     @Query("SELECT * FROM movie_results_table WHERE id = :movieId")
-    LiveData<Movie.Result> getMovieById(int movieId);
+    Movie.Result getMovieById(int movieId);
 }
 

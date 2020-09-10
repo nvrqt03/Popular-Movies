@@ -13,23 +13,25 @@ import ajmitchell.android.popularmovies.model.Movie;
 public class MovieDetailsViewModel extends AndroidViewModel {
 
     private MovieRepository repository;
-    //private LiveData<Movie.Result> selectedMovie;
+    private LiveData<Movie.Result> movie;
 
-    public MovieDetailsViewModel(@NonNull Application application) {
+    public MovieDetailsViewModel(@NonNull Application application, int movieId) {
         super(application);
         repository = new MovieRepository(getApplication());
-        //selectedMovie = repository.getMovieById(movie.getId());
-    }
-    public void insert(Movie.Result movie) {
-        repository.insert(movie);
+        movie = repository.getMovieById(movieId);
     }
 
-    public void delete(Movie.Result movie) {
-        repository.delete(movie);
-    }
 
-//    public LiveData<Movie.Result> getMovie() {
-//        return repository.getMovieById(selectedMovie);
+//    public void insert(Movie.Result movie) {
+//        repository.insert(movie);
 //    }
+//
+//    public void delete(Movie.Result movie) {
+//        repository.delete(movie);
+//    }
+
+    public LiveData<Movie.Result> getMovie() {
+        return movie;
+    }
 
 }

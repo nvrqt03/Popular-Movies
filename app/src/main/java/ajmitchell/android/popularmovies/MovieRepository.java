@@ -20,7 +20,7 @@ public class MovieRepository {
         MovieDatabase database = MovieDatabase.getInstance(application);
         movieDao = database.movieDao();
         allMovies = movieDao.getAllMovies();
-        //selectedMovie = movieDao.getMovieById(movie.getId());
+       // selectedMovie = movieDao.getMovieById();
 }
 
     public void insert(Movie.Result movie) {
