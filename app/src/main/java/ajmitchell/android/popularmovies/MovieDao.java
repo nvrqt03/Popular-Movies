@@ -26,7 +26,7 @@ public interface MovieDao {
     @Query("DELETE FROM movie_results_table WHERE id = :movieId")
     void delete(int movieId);
 
-    @Query("SELECT * FROM movie_results_table WHERE id = :movieId")
+    @Query("SELECT id FROM movie_results_table WHERE id = :movieId")
     Movie.Result getMovieById(int movieId);
 }
 

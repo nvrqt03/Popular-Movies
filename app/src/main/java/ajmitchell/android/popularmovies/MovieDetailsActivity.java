@@ -64,7 +64,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     private MovieDatabase mDb;
     private String voteAvgText;
     ToggleButton favoriteImage;
-    private MovieDetailsViewModel movieDetailsViewModel;
+    private ArrayList<Integer> movieIds = new ArrayList<>();
 
     public static final String TAG = "MovieDetailsActivity";
 
@@ -111,20 +111,22 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         favoriteImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    saveToFavorites();
-                    SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
-                    editor.putBoolean("value", true);
-                    editor.apply();
-                    favoriteImage.setChecked(true);
-                } else {
-                    removeFromFavorites();
-                    SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
-                    editor.putBoolean("value", false);
-                    editor.apply();
-                    favoriteImage.setChecked(false);
+
+                    if (isChecked) {
+                        saveToFavorites();
+                        SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
+                        editor.putBoolean("value", true);
+                        editor.apply();
+                        //favoriteImage.setChecked(true);
+                    } else {
+                        removeFromFavorites();
+                        SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
+                        editor.putBoolean("value", false);
+                        editor.apply();
+                        //favoriteImage.setChecked(false);
+                    }
                 }
-            }
+
         });
 
         String imageUrl = movie.getPosterPath();
@@ -226,7 +228,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
+
                 mDb.movieDao().insertMovie(movie);
+                movieIds.add(movie.getId());
             }
         });
         Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
