@@ -76,7 +76,12 @@ public class Movie {
     @Entity(tableName = "movie_results_table")
     public static class Result implements Parcelable {
 
-        @PrimaryKey(autoGenerate = true)
+        @PrimaryKey()
+        @SerializedName("id")
+        @Expose
+        private Integer id;
+        @SerializedName("columnId")
+        @Ignore
         private int columnId;
 
         @SerializedName("poster_path")
@@ -96,9 +101,6 @@ public class Movie {
         @Expose
         @Ignore
         private List<Integer> genreIds = null;
-        @SerializedName("id")
-        @Expose
-        private Integer id;
         @SerializedName("original_title")
         @Expose
         private String originalTitle;

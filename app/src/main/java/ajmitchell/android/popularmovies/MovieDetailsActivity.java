@@ -112,19 +112,25 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    if (isChecked) {
+                //Movie.Result id = mDb.movieDao().getMovieById(movie.getId());
+                //if (isChecked && (movieIds.contains(movie.getId()))) {
+                //if (isChecked == movie.getId().equals(mDb.movieDao().getMovieById(movieId))) { // long pause, goes back to popular and nothing added to favorites
+                //if (movie.getId().equals(mDb.movieDao().getMovieById(movieId))) { // breaks
+
                         saveToFavorites();
                         SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
                         editor.putBoolean("value", true);
                         editor.apply();
-                        //favoriteImage.setChecked(true);
+                        favoriteImage.setChecked(true);
                     } else {
                         removeFromFavorites();
                         SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
                         editor.putBoolean("value", false);
                         editor.apply();
-                        //favoriteImage.setChecked(false);
+                        favoriteImage.setChecked(false);
                     }
+                Log.d(TAG, "onCheckedChanged: " + movieIds.size());
+                Log.d(TAG, "onCheckedChanged: " + movie.getId());
                 }
 
         });
@@ -228,9 +234,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-
                 mDb.movieDao().insertMovie(movie);
-                movieIds.add(movie.getId());
+                //movieIds.add(movie.getId());
             }
         });
         Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();

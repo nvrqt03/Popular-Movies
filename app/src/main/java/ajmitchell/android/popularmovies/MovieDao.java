@@ -28,5 +28,6 @@ public interface MovieDao {
 
     @Query("SELECT id FROM movie_results_table WHERE id = :movieId")
     Movie.Result getMovieById(int movieId);
+
 }
 
