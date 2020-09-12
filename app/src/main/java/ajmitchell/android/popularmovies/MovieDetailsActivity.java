@@ -234,7 +234,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             @Override
             public void run() {
                 mDb.movieDao().insertMovie(movie);
-                isFavorite(movieId);
             }
         });
         Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
