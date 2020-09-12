@@ -105,6 +105,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         getReviews(movieId);
         getTrailers(movieId);
         getOverview(movie);
+        isFavorite(movieId);
+        Log.d(TAG, "onCreate: " + isFavorite(movieId));
 
         favoriteImage = findViewById(R.id.favorites);
         favoriteImage.setChecked(false);
@@ -112,15 +114,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    isFavorite(movieId);
-                    buttonView.setButtonDrawable(R.drawable.ic_favorite_filled_24);
+                    saveToFavorites();
                 } else {
                     removeFromFavorites();
-                    buttonView.setButtonDrawable(R.drawable.ic_favorite_border_24);
                 }
-
             }
-
         });
 
         String imageUrl = movie.getPosterPath();
@@ -133,14 +131,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     public Boolean isFavorite(int id) {
         movieDetailsViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieDetailsViewModel.class);
         LiveData<Movie.Result> favorites = movieDetailsViewModel.getMovieById(id);
-        favorites.observe(this, new Observer<Movie.Result>() {
-            @Override
-            public void onChanged(Movie.Result result) {
-                saveToFavorites();
-                favoriteImage.setChecked(true);
-            }
-        });
-        return true;
+        return favorites == null;
     }
 
     public void saveToFavorites() {
@@ -148,7 +139,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             @Override
             public void run() {
                 mDb.movieDao().insertMovie(movie);
-                favoriteImage.setChecked(false);
             }
         });
         Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
