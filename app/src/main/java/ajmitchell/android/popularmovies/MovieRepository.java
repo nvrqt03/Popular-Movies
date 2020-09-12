@@ -13,15 +13,14 @@ import ajmitchell.android.popularmovies.utils.MovieDatabase;
 public class MovieRepository {
     private MovieDao movieDao;
     private LiveData<List<Movie.Result>> allMovies;
-    private LiveData<Movie.Result> selectedMovie; // do I need to initialize this, and with what?
 
     // passing application because in our ViewModel we will get application passed - this is also a subclass of context so we can use as context
     public MovieRepository(Application application) {
         MovieDatabase database = MovieDatabase.getInstance(application);
         movieDao = database.movieDao();
         allMovies = movieDao.getAllMovies();
-       // selectedMovie = movieDao.getMovieById();
-}
+    }
+
 
     public void insert(Movie.Result movie) {
         new InsertMovieAsyncTask(movieDao).execute(movie);
@@ -36,7 +35,7 @@ public class MovieRepository {
     }
 
     public LiveData<Movie.Result> getMovieById(int movieId) {
-        return selectedMovie;
+        return movieDao.getMovieById(movieId);
     }
 
     private static class InsertMovieAsyncTask extends AsyncTask<Movie.Result, Void, Void> {

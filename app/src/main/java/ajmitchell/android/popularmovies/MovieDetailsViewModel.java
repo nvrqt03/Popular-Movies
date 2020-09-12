@@ -15,10 +15,9 @@ public class MovieDetailsViewModel extends AndroidViewModel {
     private MovieRepository repository;
     private LiveData<Movie.Result> movie;
 
-    public MovieDetailsViewModel(@NonNull Application application, int movieId) {
+    public MovieDetailsViewModel(@NonNull Application application) {
         super(application);
         repository = new MovieRepository(getApplication());
-        movie = repository.getMovieById(movieId);
     }
 
 
@@ -30,8 +29,9 @@ public class MovieDetailsViewModel extends AndroidViewModel {
 //        repository.delete(movie);
 //    }
 
-    public LiveData<Movie.Result> getMovie() {
-        return movie;
+
+    public LiveData<Movie.Result>  getMovieById(int id) {
+        return repository.getMovieById(id);
     }
 
 }

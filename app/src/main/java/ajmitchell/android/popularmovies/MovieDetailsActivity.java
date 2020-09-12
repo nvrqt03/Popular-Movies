@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -65,6 +66,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     private String voteAvgText;
     ToggleButton favoriteImage;
     private ArrayList<Integer> movieIds = new ArrayList<>();
+    public MovieDetailsViewModel movieDetailsViewModel;
+
 
     public static final String TAG = "MovieDetailsActivity";
 
@@ -97,7 +100,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
         movie = intent.getParcelableExtra("Movie Details");
         movieId = movie.getId();
-
+        Log.d(TAG, "onCreate: " + movieId);
 
         getReviews(movieId);
         getTrailers(movieId);
@@ -105,33 +108,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
         favoriteImage = findViewById(R.id.favorites);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("selected", MODE_PRIVATE);
-        favoriteImage.setChecked(sharedPreferences.getBoolean("value", false));
-
         favoriteImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                //Movie.Result id = mDb.movieDao().getMovieById(movie.getId());
-                //if (isChecked && (movieIds.contains(movie.getId()))) {
-                //if (isChecked == movie.getId().equals(mDb.movieDao().getMovieById(movieId))) { // long pause, goes back to popular and nothing added to favorites
-                //if (movie.getId().equals(mDb.movieDao().getMovieById(movieId))) { // breaks
-
-                        saveToFavorites();
-                        SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
-                        editor.putBoolean("value", true);
-                        editor.apply();
-                        favoriteImage.setChecked(true);
-                    } else {
-                        removeFromFavorites();
-                        SharedPreferences.Editor editor = getSharedPreferences("selected", MODE_PRIVATE).edit();
-                        editor.putBoolean("value", false);
-                        editor.apply();
-                        favoriteImage.setChecked(false);
-                    }
-                Log.d(TAG, "onCheckedChanged: " + movieIds.size());
-                Log.d(TAG, "onCheckedChanged: " + movie.getId());
+                if (isChecked) {
+                    saveToFavorites();
+                    //buttonView.setButtonDrawable(R.drawable.ic_favorite_filled_24);
+                } else {
+                    removeFromFavorites();
+                    //buttonView.setButtonDrawable(R.drawable.ic_favorite_border_24);
                 }
+            }
 
         });
 
@@ -140,6 +127,18 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         Picasso.get()
                 .load(fullImageUrl)
                 .into(image);
+    }
+
+    public Boolean isFavorite(int id) {
+        movieDetailsViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieDetailsViewModel.class);
+        LiveData<Movie.Result> favorites = movieDetailsViewModel.getMovieById(id);
+        favorites.observe(this, new Observer<Movie.Result>() {
+            @Override
+            public void onChanged(Movie.Result result) {
+                favoriteImage.setChecked(true);
+            }
+        });
+        return false;
     }
 
     private void closeOnError() {
@@ -235,7 +234,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             @Override
             public void run() {
                 mDb.movieDao().insertMovie(movie);
-                //movieIds.add(movie.getId());
+                isFavorite(movieId);
             }
         });
         Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
