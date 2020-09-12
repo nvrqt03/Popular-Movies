@@ -106,7 +106,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         getTrailers(movieId);
         getOverview(movie);
         isFavorite(movieId);
-        Log.d(TAG, "onCreate: " + isFavorite(movieId));
 
         favoriteImage = findViewById(R.id.favorites);
         favoriteImage.setChecked(false);
@@ -128,10 +127,20 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 .into(image);
     }
 
-    public Boolean isFavorite(int id) {
+    public void isFavorite(int id) {
         movieDetailsViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieDetailsViewModel.class);
         LiveData<Movie.Result> favorites = movieDetailsViewModel.getMovieById(id);
-        return favorites == null;
+        favorites.observe(this, new Observer<Movie.Result>() {
+            @Override
+            public void onChanged(Movie.Result result) {
+                if (favorites.getValue() != null) {
+                    Log.d(TAG, "onChanged: " + "item is favorite");
+                } else {
+                    //item is not a favorite
+                    Log.d(TAG, "onChanged: " + "item is not a favorite");
+                }
+            }
+        });
     }
 
     public void saveToFavorites() {
