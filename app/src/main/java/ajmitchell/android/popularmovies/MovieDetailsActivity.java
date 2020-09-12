@@ -107,17 +107,18 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         getOverview(movie);
 
         favoriteImage = findViewById(R.id.favorites);
-
+        favoriteImage.setChecked(false);
         favoriteImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    saveToFavorites();
-                    //buttonView.setButtonDrawable(R.drawable.ic_favorite_filled_24);
+                    isFavorite(movieId);
+                    buttonView.setButtonDrawable(R.drawable.ic_favorite_filled_24);
                 } else {
                     removeFromFavorites();
-                    //buttonView.setButtonDrawable(R.drawable.ic_favorite_border_24);
+                    buttonView.setButtonDrawable(R.drawable.ic_favorite_border_24);
                 }
+
             }
 
         });
@@ -135,10 +136,32 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         favorites.observe(this, new Observer<Movie.Result>() {
             @Override
             public void onChanged(Movie.Result result) {
+                saveToFavorites();
                 favoriteImage.setChecked(true);
             }
         });
-        return false;
+        return true;
+    }
+
+    public void saveToFavorites() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.movieDao().insertMovie(movie);
+                favoriteImage.setChecked(false);
+            }
+        });
+        Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
+    }
+
+    public void removeFromFavorites() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.movieDao().delete(movie.getId());
+            }
+        });
+        Toast.makeText(this, "removed from favorites", Toast.LENGTH_SHORT).show();
     }
 
     private void closeOnError() {
@@ -227,26 +250,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             }
         });
         return reviewList;
-    }
-
-    public void saveToFavorites() {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.movieDao().insertMovie(movie);
-            }
-        });
-        Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
-    }
-
-    public void removeFromFavorites() {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.movieDao().delete(movie.getId());
-            }
-        });
-        Toast.makeText(this, "removed from favorites", Toast.LENGTH_SHORT).show();
     }
 
 }
