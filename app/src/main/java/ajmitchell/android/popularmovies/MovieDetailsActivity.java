@@ -139,7 +139,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 } else if (movie.getId() == result.getId() && !favoriteImage.isChecked()) {
                     favoriteImage.setChecked(true);
                 } else {
-                    favoriteImage.setChecked(false);
+                    favoriteImage.setChecked(true);
                 }
             }
         });
@@ -152,7 +152,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 mDb.movieDao().insertMovie(movie);
             }
         });
-        Toast.makeText(this, "added to favorites", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MovieDetailsActivity.this, "added to favorites", Toast.LENGTH_SHORT).show();
     }
 
     public void removeFromFavorites() {
