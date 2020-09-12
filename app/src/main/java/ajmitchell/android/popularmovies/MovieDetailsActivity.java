@@ -133,11 +133,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         favorites.observe(this, new Observer<Movie.Result>() {
             @Override
             public void onChanged(Movie.Result result) {
-                if (favorites.getValue() != null) {
-                    Log.d(TAG, "onChanged: " + "item is favorite");
+                favorites.removeObserver(this);
+                if (result == null) {
+                    favoriteImage.setChecked(false);
+                } else if (movie.getId() == result.getId() && !favoriteImage.isChecked()) {
+                    favoriteImage.setChecked(true);
                 } else {
-                    //item is not a favorite
-                    Log.d(TAG, "onChanged: " + "item is not a favorite");
+                    favoriteImage.setChecked(false);
                 }
             }
         });
