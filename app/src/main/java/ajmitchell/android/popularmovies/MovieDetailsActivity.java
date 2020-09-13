@@ -65,7 +65,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     private MovieDatabase mDb;
     private String voteAvgText;
     ToggleButton favoriteImage;
-    private ArrayList<Integer> movieIds = new ArrayList<>();
+    public Boolean isFavorite;
     public MovieDetailsViewModel movieDetailsViewModel;
 
 
@@ -112,6 +112,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         favoriteImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isPressed())
                 if (isChecked) {
                     saveToFavorites();
                 } else {
@@ -135,10 +136,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             public void onChanged(Movie.Result result) {
                 favorites.removeObserver(this);
                 if (result == null) {
+                    isFavorite = false;
                     favoriteImage.setChecked(false);
                 } else if (movie.getId() == result.getId() && !favoriteImage.isChecked()) {
+                    isFavorite = true;
                     favoriteImage.setChecked(true);
                 } else {
+                    isFavorite = true;
                     favoriteImage.setChecked(true);
                 }
             }
@@ -149,6 +153,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
+                if (!isFavorite)
                 mDb.movieDao().insertMovie(movie);
             }
         });
