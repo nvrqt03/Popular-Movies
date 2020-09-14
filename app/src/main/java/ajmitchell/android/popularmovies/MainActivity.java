@@ -9,16 +9,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Parcelable;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 import ajmitchell.android.popularmovies.adapter.MovieAdapter;
@@ -26,7 +26,7 @@ import ajmitchell.android.popularmovies.apiClients.MovieApiClient;
 import ajmitchell.android.popularmovies.model.Movie;
 import ajmitchell.android.popularmovies.utils.Constants;
 import ajmitchell.android.popularmovies.apiClients.MovieDataApi;
-import ajmitchell.android.popularmovies.utils.MovieDatabase;
+import ajmitchell.android.popularmovies.database.MovieDatabase;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     private ActionBar actionBar;
     private MovieDatabase mDb;
     private MovieViewModel movieViewModel;
-
+    private Parcelable mLayoutManagerSavedState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,23 +50,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
 
-//        movieViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);
-//        movieViewModel.getAllMovies().observe(this, new Observer<List<Movie.Result>>() {
-//            @Override
-//            public void onChanged(List<Movie.Result> results) {
-//                movieViewModel.getAllMovies().removeObserver(this);
-//                adapter.setMovies(results);
-//                recyclerView.setAdapter(adapter);
-//            }
-//        });
-
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, calculateNoOfColumns(this)));
         adapter = new MovieAdapter(MainActivity.this, movieList, this);
         recyclerView.setAdapter(adapter);
         mDb = MovieDatabase.getInstance(getApplicationContext());
         getMovies(Constants.POPULAR);
 
+        if (savedInstanceState != null) {
+            mLayoutManagerSavedState = savedInstanceState.getParcelable("KEY_INSTANCE_STATE_RV_POSITION");
+            adapter.setMovies((List<Movie.Result>) mLayoutManagerSavedState);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("KEY_INSTANCE_STATE_RV_POSITION", recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     public void getMovies(String category) {
@@ -140,7 +140,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
                 actionBar.setTitle("Favorites");
             }
         });
+    }
 
+    public static int calculateNoOfColumns(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int scalingFactor = 200;
+        int noOfColumns = (int) (dpWidth / scalingFactor);
+        if(noOfColumns < 2)
+            noOfColumns = 2;
+        return noOfColumns;
     }
 
 }

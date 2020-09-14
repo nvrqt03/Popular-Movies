@@ -1,6 +1,5 @@
 package ajmitchell.android.popularmovies;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -9,34 +8,22 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
-import ajmitchell.android.popularmovies.adapter.MovieAdapter;
 import ajmitchell.android.popularmovies.adapter.ReviewAdapter;
 import ajmitchell.android.popularmovies.adapter.TrailerAdapter;
 import ajmitchell.android.popularmovies.apiClients.MovieApiClient;
@@ -44,8 +31,9 @@ import ajmitchell.android.popularmovies.apiClients.MovieDataApi;
 import ajmitchell.android.popularmovies.model.Movie;
 import ajmitchell.android.popularmovies.model.Review;
 import ajmitchell.android.popularmovies.model.Video;
+import ajmitchell.android.popularmovies.utils.AppExecutors;
 import ajmitchell.android.popularmovies.utils.Constants;
-import ajmitchell.android.popularmovies.utils.MovieDatabase;
+import ajmitchell.android.popularmovies.database.MovieDatabase;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -157,7 +145,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 mDb.movieDao().insertMovie(movie);
             }
         });
-        Toast.makeText(MovieDetailsActivity.this, "added to favorites", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MovieDetailsActivity.this, R.string.addToFavorites, Toast.LENGTH_SHORT).show();
     }
 
     public void removeFromFavorites() {
@@ -167,12 +155,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 mDb.movieDao().delete(movie.getId());
             }
         });
-        Toast.makeText(this, "removed from favorites", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.removeFromFavorite, Toast.LENGTH_SHORT).show();
     }
 
     private void closeOnError() {
         finish();
-        Toast.makeText(this, "Data not available", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.dataNotAvail, Toast.LENGTH_SHORT).show();
     }
 
     private String getOverview(Movie.Result movieResult) {

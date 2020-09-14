@@ -1,4 +1,4 @@
-package ajmitchell.android.popularmovies;
+package ajmitchell.android.popularmovies.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

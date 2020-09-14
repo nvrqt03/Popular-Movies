@@ -4,18 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 
-import ajmitchell.android.popularmovies.MovieRepository;
 import ajmitchell.android.popularmovies.R;
 import ajmitchell.android.popularmovies.model.Movie;
 import ajmitchell.android.popularmovies.utils.Constants;

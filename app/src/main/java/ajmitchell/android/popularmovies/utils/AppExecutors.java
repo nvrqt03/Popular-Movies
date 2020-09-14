@@ -1,4 +1,4 @@
-package ajmitchell.android.popularmovies;
+package ajmitchell.android.popularmovies.utils;
 
 import android.os.Handler;
 import android.os.Looper;

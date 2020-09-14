@@ -1,17 +1,15 @@
-package ajmitchell.android.popularmovies.utils;
+package ajmitchell.android.popularmovies.database;
 
 import android.content.Context;
 import android.util.Log;
-import android.util.LogPrinter;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
-import ajmitchell.android.popularmovies.MovieDao;
 import ajmitchell.android.popularmovies.model.Movie;
+import ajmitchell.android.popularmovies.utils.MovieTypeConverter;
 
 @Database(entities = {Movie.Result.class}, version = 2, exportSchema = false)
 @TypeConverters(MovieTypeConverter.class)

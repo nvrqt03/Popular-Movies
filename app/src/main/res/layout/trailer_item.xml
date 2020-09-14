@@ -22,21 +22,5 @@
             android:paddingLeft="10dp"
             android:textSize="16dp" />
 
-<!--        <ImageButton-->
-<!--            android:id="@+id/play"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@+id/trailer_item"-->
-<!--            android:background="@drawable/ic_baseline_play_arrow_24" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/play_trailer"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@+id/trailer_item"-->
-<!--            android:layout_toRightOf="@+id/play"-->
-<!--            android:text="Play Trailer"-->
-<!--            android:textStyle="italic" />-->
-
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

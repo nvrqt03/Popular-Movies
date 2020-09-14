@@ -9,6 +9,11 @@
     <string name="highestRated">Highest Rated</string>
     <string name="comingSoon">Coming Soon</string>
     <string name="favorites">Favorites</string>
+    <string name="addToFavorites">added to favorites</string>
+    <string name="removeFromFavorite">removed from favorites</string>
+    <string name="dataNotAvail">Data not available</string>
+    <string name="trailers">Trailers:</string>
+    <string name="reviews">Reviews:</string>
 
 
 </resources>

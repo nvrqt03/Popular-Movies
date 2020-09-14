@@ -1,4 +1,4 @@
-package ajmitchell.android.popularmovies;
+package ajmitchell.android.popularmovies.database;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -7,8 +7,9 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import ajmitchell.android.popularmovies.database.MovieDao;
 import ajmitchell.android.popularmovies.model.Movie;
-import ajmitchell.android.popularmovies.utils.MovieDatabase;
+import ajmitchell.android.popularmovies.database.MovieDatabase;
 
 public class MovieRepository {
     private MovieDao movieDao;

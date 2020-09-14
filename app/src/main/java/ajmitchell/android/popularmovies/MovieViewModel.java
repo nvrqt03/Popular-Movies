@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import ajmitchell.android.popularmovies.database.MovieRepository;
 import ajmitchell.android.popularmovies.model.Movie;
 
 public class MovieViewModel extends AndroidViewModel {
