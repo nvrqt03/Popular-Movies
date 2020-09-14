@@ -20,9 +20,9 @@
 ![image3](https://user-images.githubusercontent.com/22177989/93109006-20ccf480-f679-11ea-9934-13b287638dcd.png)
 
 # New Features 
-* Adding Upcoming movies
-* Incorporating movie trailers
-* Allowing user to save favorite movies
+* Added Upcoming movies
+* Incorporated movie trailers and reviews
+* User can save favorite movies
 
 ![image5](https://user-images.githubusercontent.com/22177989/93109047-2c202000-f679-11ea-9718-91f4b56f4b12.png)
 
