@@ -24,7 +24,7 @@
 * Incorporating movie trailers
 * Allowing user to save favorite movies
 
-![image4](https://user-images.githubusercontent.com/22177989/93109035-288c9900-f679-11ea-9d93-8549fd92f430.png)
 ![image5](https://user-images.githubusercontent.com/22177989/93109047-2c202000-f679-11ea-9718-91f4b56f4b12.png)
 
+![image4](https://user-images.githubusercontent.com/22177989/93109035-288c9900-f679-11ea-9d93-8549fd92f430.png)
 ![image6](https://user-images.githubusercontent.com/22177989/93109374-9a64e280-f679-11ea-9df2-9ed8a165bc82.png)
