@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+
+    <string name="temp_date">2015</string>
+    <string name="temp_score">8.1/10</string>
+    <string name="title_activity_movie_details">Movie Details</string>
+    <string name="options">Options</string>
+    <string name="popular">Popular</string>
+    <string name="highestRated">Highest Rated</string>
+    <string name="comingSoon">Coming Soon</string>
+    <string name="favorites">Favorites</string>
+    <string name="addToFavorites">added to favorites</string>
+    <string name="removeFromFavorite">removed from favorites</string>
+    <string name="dataNotAvail">Data not available</string>
+    <string name="trailers">Trailers:</string>
+    <string name="reviews">Reviews:</string>
+
+
+</resources>
