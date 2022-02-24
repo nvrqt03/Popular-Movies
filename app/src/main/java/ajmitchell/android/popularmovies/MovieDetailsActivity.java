@@ -117,7 +117,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     }
 
     public void isFavorite(int id) {
-        movieDetailsViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieDetailsViewModel.class);
+        movieDetailsViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieDetailsViewModel.class);
         LiveData<Movie.Result> favorites = movieDetailsViewModel.getMovieById(id);
         favorites.observe(this, new Observer<Movie.Result>() {
             @Override

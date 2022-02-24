@@ -16,9 +16,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ajmitchell.android.popularmovies.adapter.MovieAdapter;
@@ -37,10 +39,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     private RecyclerView recyclerView;
     private MovieAdapter adapter;
     private List<Movie.Result> movieList;
-    private ActionBar actionBar;
+    public ActionBar actionBar;
     private MovieDatabase mDb;
     private MovieViewModel movieViewModel;
     private Parcelable mLayoutManagerSavedState;
+    private RecyclerView.LayoutManager mLayoutManager;
+
 // test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,23 +54,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
 
+        movieViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);
+
+
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, calculateNoOfColumns(this)));
-        adapter = new MovieAdapter(MainActivity.this, movieList, this);
+        // inside adapter, instead of movieList (since we want the viewModel to have this) we say movieViewModel.getMovieList
+        adapter = new MovieAdapter(MainActivity.this, movieViewModel.getMovieList(), this);
         recyclerView.setAdapter(adapter);
+        mLayoutManager = recyclerView.getLayoutManager();
         mDb = MovieDatabase.getInstance(getApplicationContext());
-        getMovies(Constants.POPULAR);
 
-        if (savedInstanceState != null) {
-            mLayoutManagerSavedState = savedInstanceState.getParcelable("KEY_INSTANCE_STATE_RV_POSITION");
-            adapter.setMovies((List<Movie.Result>) mLayoutManagerSavedState);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("KEY_INSTANCE_STATE_RV_POSITION", recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     public void getMovies(String category) {
@@ -77,10 +75,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
             @Override
             public void onResponse(Call<Movie> call, Response<Movie> response) {
                 Movie movieDetails = response.body();
+                // here is where we use a setter to set movieList to viewModel movieList
                 movieList = movieDetails.getResults();
-                adapter = new MovieAdapter(MainActivity.this,
-                        movieList, //should this be movies from
-                        adapter.mOnMovieListener);
+                List<Movie.Result> popMovieList = movieViewModel.setMovieList(movieList);;
+
+                //movieViewModel.setMovieList(movieList);
+                adapter.setMovies(popMovieList);
+//                adapter = new MovieAdapter(MainActivity.this,
+//                        movieViewModel.movieList, //should this be movies from
+//                        adapter.mOnMovieListener);
                 recyclerView.setAdapter(adapter);
             }
 
@@ -130,12 +133,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
 
     public void getFavorites() {
         final LiveData<List<Movie.Result>> favorites = mDb.movieDao().getAllMovies();
-        movieViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);
+        movieViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MovieViewModel.class);
         favorites.observe(this, new Observer<List<Movie.Result>>() {
             @Override
             public void onChanged(List<Movie.Result> results) {
                 movieViewModel.getAllMovies().removeObserver(this);
-                adapter.setMovies(results);
+                List<Movie.Result> resultList = movieViewModel.setMovieList(results);
+                adapter.setMovies(resultList);
                 recyclerView.setAdapter(adapter);
                 actionBar.setTitle("Favorites");
             }
